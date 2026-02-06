@@ -1,0 +1,43 @@
+# Git Link Steps (Summary)
+
+## Case A: New local folder, new GitHub repo (empty remote)
+1. cd C:\academia\src\jp02_tasklist_html
+2. git init
+3. git add .
+4. git commit -m "Initial commit"
+5. git branch -M main
+6. git remote add origin https://github.com/<user>/<repo>.git
+7. git push -u origin main
+
+Note:
+- If you see "fatal: couldn't find remote ref main" on git pull,
+  it means the remote has no main yet. Just push your local main.
+
+## Case B: Folder already has files, remote repo already has content
+1. cd C:\academia\src\jp02_tasklist_html
+2. git init
+3. git remote add origin https://github.com/<user>/<repo>.git
+4. git fetch origin
+5. git checkout -b main
+6. git add .
+7. git commit -m "Initial commit"
+8. git pull origin main --allow-unrelated-histories
+9. git push -u origin main
+
+## Case C: Empty folder, remote repo already has content
+1. cd C:\academia\src\jp02_tasklist_html
+2. git init
+3. git remote add origin https://github.com/<user>/<repo>.git
+4. git fetch origin
+5. git checkout -b main
+6. git pull origin main
+
+## Case D: Remote default branch is not main
+1. git ls-remote --heads origin
+2. If you see master (or other), use that branch name:
+   git pull origin master
+   git push -u origin master
+
+## Line Ending Warning (CRLF)
+- Warnings about LF -> CRLF are common on Windows and safe.
+- If you want to normalize, add a .gitattributes file later.

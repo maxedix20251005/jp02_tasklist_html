@@ -63,6 +63,8 @@ This package contains a pure HTML/CSS/JavaScript tasklist application. There is 
 - `DEPLOYMENT.md`
 - `LIMITATIONS.md`
 - `TEST_CHECKLIST.md`
+- `TEST_SCENARIO.md`
+- `TEST_CASES.md`
 
 ## 含まれるドキュメント (JA)
 - `USER_GUIDE.md`
@@ -71,3 +73,5 @@ This package contains a pure HTML/CSS/JavaScript tasklist application. There is 
 - `DEPLOYMENT.md`
 - `LIMITATIONS.md`
 - `TEST_CHECKLIST.md`
+- `TEST_SCENARIO.md`
+- `TEST_CASES.md`
