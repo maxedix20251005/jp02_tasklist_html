@@ -1,0 +1,45 @@
+# Database Options Notes (Frontend-Only vs Backend)
+
+## Short Answer
+- Browsers cannot connect directly to MySQL/PostgreSQL/etc.
+- HTML/CSS/JS alone can only use browser storage (localStorage, IndexedDB).
+- To use a real DB, you need a backend/API or serverless function.
+
+## Frontend-Only Storage (No Backend)
+1. localStorage
+- Simple key/value storage
+- Small size (a few MB)
+- Per browser/profile
+- Good for demos
+
+2. IndexedDB
+- Larger, structured storage with indexes
+- Async API, more complex
+- Persists after closing the browser
+- Per browser/profile
+
+3. File System Access API (Chrome/Edge)
+- Lets user pick local files to read/write
+- Requires user permission
+- Not supported in all browsers
+
+4. Static JSON files
+- Read-only without backend
+- Good for sample data
+
+## If You Want MySQL/PostgreSQL
+You need a backend, for example:
+- Node.js + Express
+- Python + Flask/FastAPI
+- Java + Spring
+- Serverless Functions (Vercel, Netlify, Cloudflare)
+
+## Free DB Options (Require Backend)
+- PostgreSQL: Supabase, Neon, Render (free tiers)
+- MySQL: PlanetScale, Railway, Clever Cloud (free tiers)
+- SQLite: local file DB (great for small apps)
+
+## Practical Recommendations
+1. Offline/demo: IndexedDB
+2. Local small app: SQLite + Node/Python
+3. Hosted free: Supabase Postgres + small API

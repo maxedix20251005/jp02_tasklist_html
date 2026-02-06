@@ -1,0 +1,32 @@
+﻿# IndexedDB 保存場所メモ（Chrome）
+
+## フォルダ名の意味
+Chrome の IndexedDB はプロファイル配下に保存されます。
+
+C:\Users\<your-username>\AppData\Local\Google\Chrome\User Data\Default\IndexedDB\
+
+フォルダ命名規則:
+- https サイト: https_<host>_0.indexeddb.leveldb
+  例: https_example.com_0.indexeddb.leveldb
+- http サイト: http_<host>_0.indexeddb.leveldb
+  例: http_localhost_0.indexeddb.leveldb
+- ローカルファイル: file__0.indexeddb.leveldb
+  注: file:// はまとめて 1 つのバケットです。
+
+## 対象フォルダの特定方法
+1. Chrome を閉じる。
+2. 再度開いてアプリを起動する。
+3. タスクを追加/編集して変更を発生させる。
+4. Explorer で IndexedDB フォルダ一覧を更新する。
+5. 更新日時が最新のフォルダが対象。
+
+## 補足
+- IndexedDB のデータはディスク（HDD/SSD）に保存されます。
+- 同じファイルでも http://localhost で開くと別の保存先になります。
+- LevelDB ファイルは人間が読めない形式です。DevTools で確認してください。
+
+## DevTools での確認
+Chrome DevTools:
+- F12 -> Application タブ -> IndexedDB
+- tasklist_db を探す
+  Stores: todos, categories, state

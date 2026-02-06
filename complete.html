@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Saved</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="theme-green" data-page="complete">
+    <div class="page">
+      <div class="title">Task Saved</div>
+      <div class="subtitle">Your task has been saved successfully.</div>
+      <div class="card">
+        <div class="form-row">
+          <label>Task Name</label>
+          <div class="readonly-box w-wide" id="completeTitle"></div>
+        </div>
+        <div class="form-row">
+          <label>Assigned To</label>
+          <div class="readonly-box w-wide" id="completeAuthor"></div>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <div class="readonly-box w-mid" id="completeStatus"></div>
+        </div>
+        <div class="form-row">
+          <label>Priority</label>
+          <div class="readonly-box w-mid" id="completePriority"></div>
+        </div>
+        <div class="form-row">
+          <label>Start Date</label>
+          <div class="readonly-box w-date" id="completeStart"></div>
+        </div>
+        <div class="form-row">
+          <label>Due Date</label>
+          <div class="readonly-box w-date" id="completeDue"></div>
+        </div>
+        <div class="form-row">
+          <label>% Complete</label>
+          <div class="readonly-box w-small" id="completePercent"></div>
+        </div>
+        <div class="form-row">
+          <label>RAG</label>
+          <div class="readonly-box w-small rag-box">
+            <span class="rag" id="completeRag"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Description</label>
+          <div class="readonly-box w-textarea" id="completeDetail"></div>
+        </div>
+        <div class="button-row">
+          <a class="btn btn-secondary" href="index.html">Back</a>
+          <a class="btn btn-primary" id="completeEdit" href="#">Edit</a>
+        </div>
+      </div>
+    </div>
+    <script src="assets/app.js"></script>
+  </body>
+</html>

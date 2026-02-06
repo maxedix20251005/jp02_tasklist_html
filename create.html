@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Form</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="theme-green" data-page="create">
+    <div class="page">
+      <div class="title" id="formTitle">New Task</div>
+      <div class="card">
+        <form id="todoForm" novalidate>
+          <input type="hidden" name="no" />
+          <div class="form-row">
+            <label for="title">Task Name</label>
+            <div>
+              <input id="title" class="input-text" type="text" name="title" />
+              <div class="error" data-error-for="title"></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="author">Assigned To</label>
+            <div>
+              <input id="author" class="input-text" type="text" name="author" />
+              <div class="error" data-error-for="author"></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="categoryId">Category</label>
+            <div>
+              <select id="categoryId" class="input-mid" name="categoryId"></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="status">Status</label>
+            <div>
+              <select id="status" class="input-mid" name="status">
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Merged">Merged</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="priority">Priority</label>
+            <div>
+              <select id="priority" class="input-mid" name="priority">
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="startDate">Start Date</label>
+            <div>
+              <input id="startDate" class="input-date" type="date" name="startDate" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="dueDate">Due Date</label>
+            <div>
+              <input id="dueDate" class="input-date" type="date" name="dueDate" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="percentComplete">% Complete</label>
+            <div>
+              <input id="percentComplete" class="input-small" type="number" min="0" max="100" name="percentComplete" />
+              <div class="error" data-error-for="percentComplete"></div>
+            </div>
+          </div>
+          <div class="form-row" id="ragRow">
+            <label>RAG</label>
+            <div class="readonly-box w-small rag-box">
+              <span class="rag" id="ragValue"></span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="detail">Description</label>
+            <div>
+              <textarea id="detail" class="textarea" name="detail"></textarea>
+              <div class="error" data-error-for="detail"></div>
+            </div>
+          </div>
+        </form>
+        <div class="button-row">
+          <button class="btn btn-primary" type="submit" form="todoForm">Confirm</button>
+          <a class="btn btn-secondary" href="index.html">Back</a>
+        </div>
+      </div>
+    </div>
+    <script src="assets/app.js"></script>
+  </body>
+</html>

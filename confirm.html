@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm Task</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="theme-green" data-page="confirm">
+    <div class="page">
+      <div class="title">Confirm Task</div>
+      <div class="card">
+        <div class="form-row">
+          <label>Task Name</label>
+          <div class="readonly-box w-wide" id="confirmTitle"></div>
+        </div>
+        <div class="form-row">
+          <label>Assigned To</label>
+          <div class="readonly-box w-wide" id="confirmAuthor"></div>
+        </div>
+        <div class="form-row">
+          <label>Category</label>
+          <div class="readonly-box w-mid" id="confirmCategory"></div>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <div class="readonly-box w-mid" id="confirmStatus"></div>
+        </div>
+        <div class="form-row">
+          <label>Priority</label>
+          <div class="readonly-box w-mid" id="confirmPriority"></div>
+        </div>
+        <div class="form-row">
+          <label>Start Date</label>
+          <div class="readonly-box w-date" id="confirmStart"></div>
+        </div>
+        <div class="form-row">
+          <label>Due Date</label>
+          <div class="readonly-box w-date" id="confirmDue"></div>
+        </div>
+        <div class="form-row">
+          <label>% Complete</label>
+          <div class="readonly-box w-small" id="confirmPercent"></div>
+        </div>
+        <div class="form-row">
+          <label>RAG</label>
+          <div class="readonly-box w-small rag-box">
+            <span class="rag" id="confirmRag"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Description</label>
+          <div class="readonly-box w-textarea" id="confirmDetail"></div>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-primary" id="saveButton" type="button">Save</button>
+          <button class="btn btn-secondary" id="backButton" type="button">Back</button>
+        </div>
+      </div>
+    </div>
+    <script src="assets/app.js"></script>
+  </body>
+</html>

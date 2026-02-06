@@ -1,0 +1,57 @@
+﻿# メモまとめ（日本語・詳細版）
+
+## 1. アプリ概要
+- 純粋な HTML/CSS/JavaScript のタスクリストアプリ。
+- バックエンドなし。データはブラウザ内に保存。
+- 保存場所: C:\academia\src\jp02_tasklist_html
+
+## 2. 保存方式の流れ
+- 最初は localStorage を採用（簡単のため）。
+- file:// + module スクリプトの組み合わせで確認画面の問題が発生。
+- file:// 制限を避けるため、通常の script タグに変更。
+- 永続性と拡張性のため IndexedDB に移行。
+
+## 3. IndexedDB の永続性
+- ブラウザを閉じてもデータは残る。
+- データはブラウザのプロファイル配下にディスク保存（HDD/SSD）。
+
+## 4. MySQL がバックエンド必須な理由
+- ブラウザは MySQL/PostgreSQL に直接接続できない。
+- 必ずバックエンド/API またはサーバレスが必要。
+- フロントのみの選択肢は localStorage / IndexedDB / File System Access API。
+
+## 5. Chrome の IndexedDB 保存場所
+既定プロファイルのパス:
+C:\Users\<your-username>\AppData\Local\Google\Chrome\User Data\Default\IndexedDB\
+
+フォルダ命名規則:
+- https サイト: https_<host>_0.indexeddb.leveldb
+- http サイト: http_<host>_0.indexeddb.leveldb
+- ローカルファイル: file__0.indexeddb.leveldb（file:// はまとめて 1 つ）
+
+## 6. 対象フォルダの特定方法
+1. アプリを開き、タスクを追加/編集する。
+2. Explorer で IndexedDB フォルダ一覧を更新。
+3. 更新日時が最新のフォルダが対象。
+
+## 7. DevTools からの確認（Chrome）
+- F12 -> Application タブ -> IndexedDB
+- Database: tasklist_db
+- Stores: todos, categories, state
+
+## 8. file:// のスクリプト注意点
+- file:// では module スクリプトが制限される場合がある。
+- 本アプリは通常 script で動作。
+
+## 9. 初期データの扱い
+- IndexedDB が空の場合のみ初期データを投入。
+- データがある場合は既存データを使用。
+
+## 10. 主なファイル
+- C:\academia\src\jp02_tasklist_html\assets\app.js
+- C:\academia\src\jp02_tasklist_html\assets\styles.css
+- C:\academia\src\jp02_tasklist_html\index.html
+- C:\academia\src\jp02_tasklist_html\create.html
+- C:\academia\src\jp02_tasklist_html\confirm.html
+- C:\academia\src\jp02_tasklist_html\complete.html
+- C:\academia\src\jp02_tasklist_html\view.html

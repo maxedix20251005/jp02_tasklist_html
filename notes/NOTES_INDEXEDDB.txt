@@ -1,0 +1,33 @@
+# IndexedDB Location Notes (Chrome)
+
+## What The Folder Names Mean
+Chrome stores IndexedDB per origin under your profile directory:
+
+C:\Users\<your-username>\AppData\Local\Google\Chrome\User Data\Default\IndexedDB\
+
+Folder naming rules:
+- https sites: https_<host>_0.indexeddb.leveldb
+  Example: https_example.com_0.indexeddb.leveldb
+- http sites: http_<host>_0.indexeddb.leveldb
+  Example: http_localhost_0.indexeddb.leveldb
+- local files: file__0.indexeddb.leveldb
+  Note: Chrome groups all file:// origins into this one bucket.
+
+## How To Identify The Right Folder
+1. Close Chrome.
+2. Reopen Chrome and open the app.
+3. Make a change in the app (add a task, edit, delete).
+4. In Explorer, refresh the IndexedDB folder list.
+5. The folder with the newest timestamp is the one being used.
+
+## Notes
+- IndexedDB data is stored on disk (HDD/SSD) in Chrome's profile.
+- A different origin (for example, serving the same files at http://localhost)
+  will use a different folder and a different database.
+- The LevelDB files are not human-readable. Use DevTools to inspect data.
+
+## DevTools Quick Access
+Chrome DevTools:
+- F12 -> Application tab -> IndexedDB
+- Look for tasklist_db
+  Stores: todos, categories, state

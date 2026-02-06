@@ -1,0 +1,41 @@
+﻿# DB 選択メモ（フロントのみ vs バックエンドあり）
+
+## 要点
+- ブラウザは MySQL/PostgreSQL に直接接続できません。
+- 本格 DB を使うならバックエンド/API が必要です。
+- フロントのみなら localStorage / IndexedDB が現実的です。
+
+## バックエンド不要（フロントのみ）
+1. localStorage
+- シンプルなキー/値
+- 容量は数 MB 程度
+- ブラウザ単位
+
+2. IndexedDB
+- 大容量・構造化データ向き
+- 非同期 API
+- ブラウザを閉じても保持
+
+3. File System Access API（Chrome/Edge）
+- ユーザーがローカルファイルに保存/読込
+- 許可が必要、ブラウザ依存
+
+4. 静的 JSON
+- 読み取り専用
+- 更新にはバックエンドが必要
+
+## MySQL/PostgreSQL を使う場合
+- Node.js + Express
+- Python + Flask/FastAPI
+- Java + Spring
+- Serverless Functions (Vercel, Netlify, Cloudflare)
+
+## 無料 DB（バックエンド必須）
+- PostgreSQL: Supabase, Neon, Render（無料枠）
+- MySQL: PlanetScale, Railway, Clever Cloud（無料枠）
+- SQLite: ローカルファイル DB（小規模に最適）
+
+## 実用的な選択
+1. オフライン/デモ: IndexedDB
+2. ローカル小規模: SQLite + Node/Python
+3. 無料ホスティング: Supabase + 小さな API

@@ -1,0 +1,57 @@
+# Notes Summary (English, Detailed)
+
+## 1. App Scope
+- Pure HTML/CSS/JS version of the task list app.
+- No backend. Data stored in the browser.
+- Files live in: C:\academia\src\jp02_tasklist_html
+
+## 2. Storage Decisions (Timeline)
+- Started with localStorage for simplicity.
+- Confirm page issue appeared when using file:// and module scripts.
+- Switched to normal script tags to avoid file:// module restrictions.
+- Migrated storage to IndexedDB for persistence and scale.
+
+## 3. IndexedDB Persistence
+- IndexedDB persists after closing and reopening the browser.
+- Data is stored on disk (HDD/SSD) under the browser profile.
+
+## 4. Why MySQL Needs Backend
+- Browsers cannot connect directly to MySQL/Postgres.
+- You need a backend/API or serverless function.
+- Frontend-only options: localStorage, IndexedDB, File System Access API.
+
+## 5. Chrome IndexedDB Location
+Default profile path:
+C:\Users\<your-username>\AppData\Local\Google\Chrome\User Data\Default\IndexedDB\
+
+Folder naming rules:
+- https sites: https_<host>_0.indexeddb.leveldb
+- http sites: http_<host>_0.indexeddb.leveldb
+- local files: file__0.indexeddb.leveldb (all file:// origins)
+
+## 6. How To Identify The Right Folder
+1. Open the app and add/edit a task.
+2. Refresh the IndexedDB folder list in Explorer.
+3. The folder with the latest timestamp is the active one.
+
+## 7. DevTools Access (Chrome)
+- F12 -> Application tab -> IndexedDB
+- Database: tasklist_db
+- Stores: todos, categories, state
+
+## 8. File:// Script Note
+- Some browsers restrict module scripts on file://
+- App uses a normal script tag to avoid this issue.
+
+## 9. Seed Data Behavior
+- When IndexedDB is empty, it seeds default tasks/categories.
+- If data exists, it reuses existing records.
+
+## 10. Files Of Interest
+- C:\academia\src\jp02_tasklist_html\assets\app.js
+- C:\academia\src\jp02_tasklist_html\assets\styles.css
+- C:\academia\src\jp02_tasklist_html\index.html
+- C:\academia\src\jp02_tasklist_html\create.html
+- C:\academia\src\jp02_tasklist_html\confirm.html
+- C:\academia\src\jp02_tasklist_html\complete.html
+- C:\academia\src\jp02_tasklist_html\view.html

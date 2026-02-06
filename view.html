@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Detail</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body class="theme-red" data-page="view">
+    <div class="page">
+      <div class="title">Task Detail</div>
+      <div class="card">
+        <div class="form-row">
+          <label>Task Name</label>
+          <div class="readonly-box w-wide" id="viewTitle"></div>
+        </div>
+        <div class="form-row">
+          <label>Assigned To</label>
+          <div class="readonly-box w-wide" id="viewAuthor"></div>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <div class="readonly-box w-mid" id="viewStatus"></div>
+        </div>
+        <div class="form-row">
+          <label>Priority</label>
+          <div class="readonly-box w-mid" id="viewPriority"></div>
+        </div>
+        <div class="form-row">
+          <label>Start Date</label>
+          <div class="readonly-box w-date" id="viewStart"></div>
+        </div>
+        <div class="form-row">
+          <label>Due Date</label>
+          <div class="readonly-box w-date" id="viewDue"></div>
+        </div>
+        <div class="form-row">
+          <label>% Complete</label>
+          <div class="readonly-box w-small" id="viewPercent"></div>
+        </div>
+        <div class="form-row">
+          <label>RAG</label>
+          <div class="readonly-box w-small rag-box">
+            <span class="rag" id="viewRag"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Description</label>
+          <div class="readonly-box w-textarea" id="viewDetail"></div>
+        </div>
+        <div class="button-row">
+          <a class="btn btn-secondary" href="index.html">Back</a>
+          <a class="btn btn-primary" id="viewEdit" href="#">Edit</a>
+        </div>
+      </div>
+    </div>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
