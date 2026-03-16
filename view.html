@@ -6,52 +6,64 @@
     <title>Task Detail</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
-  <body class="theme-red" data-page="view">
-    <div class="page">
-      <div class="title">Task Detail</div>
-      <div class="card">
-        <div class="form-row">
-          <label>Task Name</label>
-          <div class="readonly-box w-wide" id="viewTitle"></div>
-        </div>
-        <div class="form-row">
-          <label>Assigned To</label>
-          <div class="readonly-box w-wide" id="viewAuthor"></div>
-        </div>
-        <div class="form-row">
-          <label>Status</label>
-          <div class="readonly-box w-mid" id="viewStatus"></div>
-        </div>
-        <div class="form-row">
-          <label>Priority</label>
-          <div class="readonly-box w-mid" id="viewPriority"></div>
-        </div>
-        <div class="form-row">
-          <label>Start Date</label>
-          <div class="readonly-box w-date" id="viewStart"></div>
-        </div>
-        <div class="form-row">
-          <label>Due Date</label>
-          <div class="readonly-box w-date" id="viewDue"></div>
-        </div>
-        <div class="form-row">
-          <label>% Complete</label>
-          <div class="readonly-box w-small" id="viewPercent"></div>
-        </div>
-        <div class="form-row">
-          <label>RAG</label>
-          <div class="readonly-box w-small rag-box">
-            <span class="rag" id="viewRag"></span>
+  <body data-page="view">
+    <div class="app-shell">
+      <div class="page">
+        <header class="page-header compact">
+          <div class="page-header-copy">
+            <div class="eyebrow">Detail</div>
+            <h1 class="title">Task Detail</h1>
+            <p class="subtitle">Review the current task state, timing, and ownership in a read-only view.</p>
           </div>
-        </div>
-        <div class="form-row">
-          <label>Description</label>
-          <div class="readonly-box w-textarea" id="viewDetail"></div>
-        </div>
-        <div class="button-row">
-          <a class="btn btn-secondary" href="index.html">Back</a>
-          <a class="btn btn-primary" id="viewEdit" href="#">Edit</a>
-        </div>
+        </header>
+        <section class="surface card detail-grid">
+          <div class="form-row">
+            <div class="static-label">Task Name</div>
+            <div class="readonly-box w-wide" id="viewTitle"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Assigned To</div>
+            <div class="readonly-box w-wide" id="viewAuthor"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Category</div>
+            <div class="readonly-box w-mid" id="viewCategory"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Status</div>
+            <div class="readonly-box w-mid" id="viewStatus"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Priority</div>
+            <div class="readonly-box w-mid" id="viewPriority"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Start Date</div>
+            <div class="readonly-box w-date" id="viewStart"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Due Date</div>
+            <div class="readonly-box w-date" id="viewDue"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">% Complete</div>
+            <div class="readonly-box w-small" id="viewPercent"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">RAG</div>
+            <div class="readonly-box w-small rag-box">
+              <span class="rag" id="viewRag"></span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Description</div>
+            <div class="readonly-box multiline w-textarea" id="viewDetail"></div>
+          </div>
+          <div class="button-row">
+            <a class="btn btn-secondary" href="index.html">Back</a>
+            <a class="btn btn-primary" id="viewEdit" href="#">Edit</a>
+          </div>
+        </section>
       </div>
     </div>
     <script src="assets/app.js"></script>

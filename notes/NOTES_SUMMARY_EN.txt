@@ -55,3 +55,39 @@ Folder naming rules:
 - C:\academia\src\jp02_tasklist_html\confirm.html
 - C:\academia\src\jp02_tasklist_html\complete.html
 - C:\academia\src\jp02_tasklist_html\view.html
+
+## 11. Current Validation UX
+- Required-field, percent-range, and date-order checks run on the Create/Edit form.
+- Due Date must be on or after Start Date.
+- Invalid controls receive a red highlight style.
+- Focus moves to the first invalid field after submit.
+
+## 12. Current Helper Guidance UX
+- The Create/Edit form shows inline helper text for Start Date, Due Date, and % Complete.
+- Task Name and Description show live character counts.
+- Character hints update while the user types.
+
+## 13. Current Confirm UX
+- The Confirm screen groups review data into Basic Information, Schedule, and Progress.
+- This grouping is intended to improve scanability before Save.
+
+## 14. Current Empty / Success State UX
+- The list view shows a guided empty state when filters return no rows.
+- The empty state includes Reset Filters and Create Task actions.
+- The Complete page shows a success banner above the saved record summary.
+
+## 15. Current Table UX
+- The list table uses a sticky header for easier scanning on long result sets.
+- Sort indicators show active direction more clearly.
+- Long task and assignee values are visually compacted to reduce layout breakage.
+- Header labels are shortened on desktop to reduce width pressure.
+- Delete is styled as a lighter destructive action while Edit remains primary.
+- RAG is shown as a compact circular color marker without text.
+- Pagination is fixed to 10 items per page with `前へ`, `次へ`, page links, and total/range summary.
+- Due dates are highlighted red when overdue and yellow when due within 3 days.
+- Bulk delete is supported with per-row checkboxes, select-all for visible rows, and confirmation.
+
+## 16. Current Accessibility UX
+- Keyboard focus is visually strengthened on major interactive controls.
+- Form fields use linked helper and error descriptions.
+- Validation errors remain announced through dedicated error containers.

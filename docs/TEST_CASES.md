@@ -47,12 +47,21 @@
 
 ## TC-06 Pagination
 ### English
-- Steps: Set page size to 10, click page 2.
-- Expected: Items change and summary updates.
+- Steps: Open page 1, click page 2, then click `前へ` / `次へ`.
+- Expected: 10 items are shown per page, the active page changes, and the summary updates.
 
 ### 日本語
-- 手順: 表示件数10、ページ2へ移動。
-- 期待結果: 表示内容とサマリが更新。
+- 手順: 1ページ目を開き、ページ2、`前へ`、`次へ` を操作。
+- 期待結果: 1ページ10件表示、現在ページ強調、サマリ更新が行われる。
+
+## TC-06A Due Date Alert
+### English
+- Steps: Prepare one task with a past due date and one task due within 3 days.
+- Expected: Past due date is highlighted red, due-soon date is highlighted yellow.
+
+### 日本語
+- 手順: 期限切れのタスクと、3日以内期限のタスクを用意する。
+- 期待結果: 期限切れは赤、3日以内は黄で強調表示される。
 
 ## TC-07 Create Task (Valid)
 ### English
@@ -89,6 +98,15 @@
 ### 日本語
 - 手順: Delete 実行 -> 確認。
 - 期待結果: タスクが削除される。
+
+## TC-10A Bulk Delete
+### English
+- Steps: Select multiple row checkboxes, optionally use select-all, click `選択した項目を削除`, then confirm.
+- Expected: Only the selected records are deleted.
+
+### 日本語
+- 手順: 複数行を選択し、必要に応じて全選択を使い、`選択した項目を削除` を実行して確認する。
+- 期待結果: 選択されたレコードのみ削除される。
 
 ## TC-11 Persistence
 ### English

@@ -286,6 +286,8 @@ const SORT_FIELDS = new Set([
   "percentComplete"
 ]);
 
+const PAGE_SIZE = 10;
+
 function openDb() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -443,6 +445,14 @@ function getRagClass(todo) {
   return "rag-red";
 }
 
+function slugify(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function applyDefaults(todo) {
   if (!todo.status) {
     todo.status = "Not Started";
@@ -484,6 +494,42 @@ function formatDate(value) {
   return value || "";
 }
 
+function todayDateString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getDueDateState(dueDate) {
+  if (!dueDate) {
+    return "";
+  }
+  const today = todayDateString();
+  if (dueDate < today) {
+    return "overdue";
+  }
+  const due = new Date(`${dueDate}T00:00:00`);
+  const current = new Date(`${today}T00:00:00`);
+  const diffDays = Math.floor((due - current) / 86400000);
+  if (diffDays <= 3) {
+    return "soon";
+  }
+  return "";
+}
+
+function renderDueDateCell(dueDate) {
+  const formatted = formatDate(dueDate);
+  const state = getDueDateState(dueDate);
+  if (!state) {
+    return formatted;
+  }
+  const className = state === "overdue" ? "date-alert date-alert-overdue" : "date-alert date-alert-soon";
+  const label = state === "overdue" ? "Overdue" : "Due soon";
+  return `<span class="${className}" title="${label}">${formatted}</span>`;
+}
+
 function buildCategoryOptions(select, categories, includeAll) {
   select.innerHTML = "";
   if (includeAll) {
@@ -514,8 +560,7 @@ async function initIndex() {
   const todos = await loadTodos();
   const query = parseQuery();
 
-  const sizeOptions = [10, 20, 50];
-  const size = sizeOptions.includes(query.size) ? query.size : 20;
+  const size = PAGE_SIZE;
   const sortField = SORT_FIELDS.has(query.sort) ? query.sort : "no";
   const sortDir = query.dir === "desc" ? "desc" : "asc";
 
@@ -541,7 +586,7 @@ async function initIndex() {
       sort: form.elements.sort.value,
       dir: form.elements.dir.value,
       page: 0,
-      size: form.elements.size.value
+      size
     };
     window.location.href = `index.html${buildQuery(params)}`;
   });
@@ -592,44 +637,109 @@ async function initIndex() {
   const pageItems = filtered.slice(startIndex, endIndex);
 
   const table = document.getElementById("todoTable");
+  const selectAllRows = document.getElementById("selectAllRows");
+  const bulkDeleteButton = document.getElementById("bulkDeleteButton");
   table.innerHTML = "";
+  if (selectAllRows) {
+    selectAllRows.checked = false;
+    selectAllRows.indeterminate = false;
+  }
+  if (bulkDeleteButton) {
+    bulkDeleteButton.disabled = true;
+  }
 
   if (pageItems.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 11;
-    cell.textContent = "No tasks found.";
+    cell.colSpan = 12;
+    cell.innerHTML = `
+      <div class="empty-state">
+        <p class="empty-state-title">No tasks found</p>
+        <p class="empty-state-copy">Try changing the search text, selecting a different category, or resetting the current filters.</p>
+        <div class="empty-state-actions">
+          <a class="btn btn-secondary" href="index.html">Reset Filters</a>
+          <a class="btn btn-primary" href="create.html">Create Task</a>
+        </div>
+      </div>
+    `;
     row.appendChild(cell);
     table.appendChild(row);
   } else {
     pageItems.forEach((todo) => {
       const row = document.createElement("tr");
-      const status = (todo.status || "").toLowerCase();
-      if (status === "in progress") row.classList.add("status-in-progress");
-      if (status === "on hold") row.classList.add("status-on-hold");
-      if (status === "cancelled" || status === "merged") row.classList.add("status-cancelled");
-      if (status === "completed") row.classList.add("status-completed");
-      if (status === "not started") row.classList.add("status-not-started");
 
       row.innerHTML = `
+        <td class="checkbox-col"><input class="row-checkbox" data-select-row="${todo.no}" type="checkbox" aria-label="Select task ${todo.no}" /></td>
         <td>${todo.no}</td>
         <td><a class="task-link" href="view.html${buildQuery({ no: todo.no })}">${todo.taskName}</a></td>
-        <td>${todo.assignedTo}</td>
+        <td><span class="cell-text" title="${todo.assignedTo || ""}">${todo.assignedTo || ""}</span></td>
         <td>${renderCategoryBadge(todo, categories)}</td>
-        <td>${todo.status || ""}</td>
-        <td>${todo.priority || ""}</td>
+        <td>${renderStatusBadge(todo.status)}</td>
+        <td>${renderPriorityBadge(todo.priority)}</td>
         <td>${formatDate(todo.startDate)}</td>
-        <td>${formatDate(todo.dueDate)}</td>
+        <td>${renderDueDateCell(todo.dueDate)}</td>
         <td>${Number.isFinite(todo.percentComplete) ? todo.percentComplete : ""}</td>
-        <td><span class="rag ${getRagClass(todo)}">${getRagStatus(todo)}</span></td>
+        <td><span class="rag ${getRagClass(todo)}" title="${getRagStatus(todo)}" aria-label="${getRagStatus(todo)}"></span></td>
         <td>
           <div class="actions">
             <a class="btn btn-primary" href="create.html${buildQuery({ no: todo.no })}">Edit</a>
-            <button class="btn btn-danger" data-delete="${todo.no}" type="button">Delete</button>
+            <button class="btn btn-danger-subtle" data-delete="${todo.no}" type="button">Delete</button>
           </div>
         </td>
       `;
       table.appendChild(row);
+    });
+  }
+
+  const rowCheckboxes = Array.from(table.querySelectorAll("[data-select-row]"));
+
+  function updateSelectionState() {
+    const checkedCount = rowCheckboxes.filter((checkbox) => checkbox.checked).length;
+    if (bulkDeleteButton) {
+      bulkDeleteButton.disabled = checkedCount === 0;
+    }
+    if (selectAllRows) {
+      selectAllRows.checked = rowCheckboxes.length > 0 && checkedCount === rowCheckboxes.length;
+      selectAllRows.indeterminate = checkedCount > 0 && checkedCount < rowCheckboxes.length;
+    }
+  }
+
+  if (selectAllRows) {
+    selectAllRows.addEventListener("change", () => {
+      rowCheckboxes.forEach((checkbox) => {
+        checkbox.checked = selectAllRows.checked;
+      });
+      updateSelectionState();
+    });
+  }
+
+  rowCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", updateSelectionState);
+  });
+
+  if (bulkDeleteButton) {
+    bulkDeleteButton.addEventListener("click", async () => {
+      const selectedNos = rowCheckboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => Number(checkbox.getAttribute("data-select-row")))
+        .filter((value) => Number.isFinite(value));
+      if (selectedNos.length === 0) {
+        return;
+      }
+      if (!window.confirm(`選択した${selectedNos.length}件を削除しますか？`)) {
+        return;
+      }
+      const selectedSet = new Set(selectedNos);
+      const updated = (await loadTodos()).filter((todo) => !selectedSet.has(todo.no));
+      await saveTodos(updated);
+      window.location.href = `index.html${buildQuery({
+        q: query.q,
+        categoryId: query.categoryId,
+        sort: sortField,
+        dir: sortDir,
+        page,
+        size
+      })}`;
     });
   }
 
@@ -658,13 +768,13 @@ async function initIndex() {
   const summary = document.getElementById("summary");
   const start = totalElements === 0 ? 0 : startIndex + 1;
   const end = totalElements === 0 ? 0 : Math.min(endIndex, totalElements);
-  summary.textContent = `Results: ${totalElements}${query.q ? ` for \"${query.q}\"` : ""} (Showing ${start}-${end})`;
+  summary.textContent = `\u5168${totalElements}\u4ef6\u4e2d ${start}-${end}\u4ef6`;
 
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
 
   if (totalPages > 1) {
-    const prevLink = buildPageLink("Prev", page - 1, page === 0, sortField, sortDir, size, query);
+    const prevLink = buildPageLink("\u524d\u3078", page - 1, page === 0, sortField, sortDir, size, query);
     pagination.appendChild(prevLink);
 
     for (let p = 0; p < totalPages; p += 1) {
@@ -675,7 +785,7 @@ async function initIndex() {
       pagination.appendChild(link);
     }
 
-    const nextLink = buildPageLink("Next", page + 1, page + 1 >= totalPages, sortField, sortDir, size, query);
+    const nextLink = buildPageLink("\u6b21\u3078", page + 1, page + 1 >= totalPages, sortField, sortDir, size, query);
     pagination.appendChild(nextLink);
   }
 
@@ -701,10 +811,17 @@ async function initIndex() {
 
   document.querySelectorAll("[data-sort-indicator]").forEach((span) => {
     const field = span.getAttribute("data-sort-indicator");
+    const link = span.closest("a");
     if (field === sortField) {
-      span.textContent = sortDir === "asc" ? "^" : "v";
+      span.textContent = sortDir === "asc" ? "\u2191" : "\u2193";
+      if (link) {
+        link.classList.add("sort-active");
+      }
     } else {
-      span.textContent = "";
+      span.textContent = "\u2195";
+      if (link) {
+        link.classList.remove("sort-active");
+      }
     }
   });
 }
@@ -733,7 +850,21 @@ function renderCategoryBadge(todo, categories) {
   if (!category) {
     return "";
   }
-  return `<span class="badge" style="background-color:${category.color}">${category.name}</span>`;
+  return `<span class="badge badge-tone-${category.id}">${category.name}</span>`;
+}
+
+function renderStatusBadge(status) {
+  if (!status) {
+    return "";
+  }
+  return `<span class="status-pill status-${slugify(status)}">${status}</span>`;
+}
+
+function renderPriorityBadge(priority) {
+  if (!priority) {
+    return "";
+  }
+  return `<span class="priority-pill priority-${slugify(priority)}">${priority}</span>`;
 }
 
 async function initCreate() {
@@ -787,6 +918,8 @@ async function initCreate() {
   form.elements.percentComplete.value = Number.isFinite(todo.percentComplete) ? todo.percentComplete : 0;
   form.elements.detail.value = todo.description || "";
 
+  setupCreateHints(form);
+
   if (todo.priority && !Array.from(form.elements.priority.options).some((opt) => opt.value === todo.priority)) {
     const option = document.createElement("option");
     option.value = todo.priority;
@@ -826,6 +959,39 @@ async function initCreate() {
   });
 }
 
+function setupCreateHints(form) {
+  const titleInput = form.querySelector("#title");
+  const detailInput = form.querySelector("#detail");
+  const titleHint = form.querySelector("#titleHint");
+  const detailHint = form.querySelector("#detailHint");
+
+  const updateTitleHint = () => {
+    if (!titleHint) {
+      return;
+    }
+    const length = titleInput.value.trim().length;
+    titleHint.textContent = `Use a concise, descriptive task title. ${length} / 100`;
+  };
+
+  const updateDetailHint = () => {
+    if (!detailHint) {
+      return;
+    }
+    const length = detailInput.value.trim().length;
+    detailHint.textContent = `Optional notes, scope, or handoff details. ${length} / 500`;
+  };
+
+  if (titleInput) {
+    titleInput.addEventListener("input", updateTitleHint);
+    updateTitleHint();
+  }
+
+  if (detailInput) {
+    detailInput.addEventListener("input", updateDetailHint);
+    updateDetailHint();
+  }
+}
+
 function buildTodoFromForm(form) {
   const percentValue = form.elements.percentComplete.value;
   const percent = percentValue === "" ? null : Number(percentValue);
@@ -846,22 +1012,25 @@ function buildTodoFromForm(form) {
 function validateTodo(todo) {
   const errors = {};
   if (!todo.taskName) {
-    errors.title = "Title is required.";
+    errors.title = "Task Name is required.";
   } else if (todo.taskName.length > 100) {
-    errors.title = "Title must be 100 characters or fewer.";
+    errors.title = "Task Name must be 100 characters or fewer.";
   }
   if (!todo.assignedTo) {
-    errors.author = "Author is required.";
+    errors.author = "Assigned To is required.";
   } else if (todo.assignedTo.length > 50) {
-    errors.author = "Author must be 50 characters or fewer.";
+    errors.author = "Assigned To must be 50 characters or fewer.";
   }
   if (todo.description && todo.description.length > 500) {
-    errors.detail = "Detail must be 500 characters or fewer.";
+    errors.detail = "Description must be 500 characters or fewer.";
   }
   if (todo.percentComplete !== null) {
     if (todo.percentComplete < 0 || todo.percentComplete > 100) {
       errors.percentComplete = "% Complete must be between 0 and 100.";
     }
+  }
+  if (todo.startDate && todo.dueDate && todo.dueDate < todo.startDate) {
+    errors.dueDate = "Due Date must be on or after Start Date.";
   }
   return errors;
 }
@@ -870,15 +1039,43 @@ function clearErrors(form) {
   form.querySelectorAll("[data-error-for]").forEach((node) => {
     node.textContent = "";
   });
+  form.querySelectorAll(".input-invalid").forEach((node) => {
+    node.classList.remove("input-invalid");
+    node.removeAttribute("aria-invalid");
+  });
 }
 
 function showErrors(form, errors) {
+  let firstInvalidField = null;
   Object.entries(errors).forEach(([field, message]) => {
     const target = form.querySelector(`[data-error-for="${field}"]`);
     if (target) {
       target.textContent = message;
     }
+    const control = getFieldControl(form, field);
+    if (control) {
+      control.classList.add("input-invalid");
+      control.setAttribute("aria-invalid", "true");
+      if (!firstInvalidField) {
+        firstInvalidField = control;
+      }
+    }
   });
+  if (firstInvalidField) {
+    firstInvalidField.focus();
+  }
+}
+
+function getFieldControl(form, field) {
+  const fieldMap = {
+    title: "title",
+    author: "author",
+    dueDate: "dueDate",
+    percentComplete: "percentComplete",
+    detail: "detail"
+  };
+  const id = fieldMap[field];
+  return id ? form.querySelector(`#${id}`) : null;
 }
 
 async function initConfirm() {
@@ -903,7 +1100,9 @@ async function initConfirm() {
 
   const rag = getRagStatus(todo);
   const ragNode = document.getElementById("confirmRag");
-  ragNode.textContent = rag;
+  ragNode.textContent = "";
+  ragNode.title = rag;
+  ragNode.setAttribute("aria-label", rag);
   ragNode.className = `rag ${getRagClass(todo)}`;
 
   document.getElementById("saveButton").addEventListener("click", async () => {
@@ -941,13 +1140,16 @@ async function initConfirm() {
 async function initComplete() {
   const query = parseQuery();
   const todos = await loadTodos();
+  const categories = await loadCategories();
   const todo = todos.find((item) => String(item.no) === String(query.no));
   if (!todo) {
     window.location.href = "index.html";
     return;
   }
+  const category = categories.find((item) => item.id === todo.categoryId);
   setText("completeTitle", todo.taskName);
   setText("completeAuthor", todo.assignedTo);
+  setText("completeCategory", category ? category.name : "");
   setText("completeStatus", todo.status || "");
   setText("completePriority", todo.priority || "");
   setText("completeStart", formatDate(todo.startDate));
@@ -955,7 +1157,9 @@ async function initComplete() {
   setText("completePercent", Number.isFinite(todo.percentComplete) ? todo.percentComplete : "");
   setText("completeDetail", todo.description || "");
   const ragNode = document.getElementById("completeRag");
-  ragNode.textContent = getRagStatus(todo);
+  ragNode.textContent = "";
+  ragNode.title = getRagStatus(todo);
+  ragNode.setAttribute("aria-label", getRagStatus(todo));
   ragNode.className = `rag ${getRagClass(todo)}`;
   document.getElementById("completeEdit").href = `create.html${buildQuery({ no: todo.no })}`;
 }
@@ -963,13 +1167,16 @@ async function initComplete() {
 async function initView() {
   const query = parseQuery();
   const todos = await loadTodos();
+  const categories = await loadCategories();
   const todo = todos.find((item) => String(item.no) === String(query.no));
   if (!todo) {
     window.location.href = "index.html";
     return;
   }
+  const category = categories.find((item) => item.id === todo.categoryId);
   setText("viewTitle", todo.taskName);
   setText("viewAuthor", todo.assignedTo);
+  setText("viewCategory", category ? category.name : "");
   setText("viewStatus", todo.status || "");
   setText("viewPriority", todo.priority || "");
   setText("viewStart", formatDate(todo.startDate));
@@ -977,7 +1184,9 @@ async function initView() {
   setText("viewPercent", Number.isFinite(todo.percentComplete) ? todo.percentComplete : "");
   setText("viewDetail", todo.description || "");
   const ragNode = document.getElementById("viewRag");
-  ragNode.textContent = getRagStatus(todo);
+  ragNode.textContent = "";
+  ragNode.title = getRagStatus(todo);
+  ragNode.setAttribute("aria-label", getRagStatus(todo));
   ragNode.className = `rag ${getRagClass(todo)}`;
   document.getElementById("viewEdit").href = `create.html${buildQuery({ no: todo.no })}`;
 }

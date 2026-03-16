@@ -6,7 +6,17 @@
 - Use Search to filter by task name.
 - Use Category dropdown to filter by category.
 - Click column headers to sort.
-- Use pagination controls to move between pages.
+- Active sort columns show clearer sort direction indicators.
+- The table header stays visible while scrolling large result sets.
+- Long task names and assignee names are compacted for readability.
+- Desktop labels are shortened for readability, such as `Owner`, `Start`, `Due`, and `%`.
+- The Actions column uses a stronger `Edit` action and a lighter `Delete` action to reduce visual weight.
+- RAG is shown as a circular color indicator without text.
+- Pagination shows 10 items per page with `前へ`, `次へ`, page links, and a total/range summary.
+- Overdue due dates are highlighted in red, and due dates within 3 days are highlighted in yellow.
+- Each row has a checkbox, and the header checkbox selects or clears all visible rows.
+- `選択した項目を削除` deletes the selected records after confirmation.
+- When no tasks match, the page shows a guided empty state with reset and create actions.
 - Click a task name to open the detail view.
 - Click Edit or Delete from the Actions column.
 
@@ -15,7 +25,17 @@
 - Search でタスク名検索ができます。
 - Category でカテゴリ絞り込みができます。
 - 列ヘッダーで並び替えができます。
-- ページングでページ移動できます。
+- ソート中の列は方向が分かりやすい表示になります。
+- 件数が多い場合でもテーブルヘッダーを固定表示します。
+- 長いタスク名や担当者名は読みやすく整理して表示します。
+- 一覧では `Owner`、`Start`、`Due`、`%` のようにラベルを短縮しています。
+- Actions 列は `Edit` を主操作、`Delete` を軽い表示にして横幅と視認性を調整しています。
+- RAG は文字なしの円形カラー表示にしています。
+- ページングは 1 ページ 10 件固定で、`前へ`、`次へ`、ページ番号、総件数/表示範囲を表示します。
+- 期限切れの Due Date は赤、3日以内の Due Date は黄で強調表示します。
+- 各行にチェックボックスがあり、ヘッダーのチェックボックスで表示中の行を一括選択/解除できます。
+- `選択した項目を削除` は確認ダイアログの後に選択レコードを一括削除します。
+- 条件に一致するタスクがない場合は、リセットと新規作成を案内する空状態を表示します。
 - タスク名をクリックすると詳細画面へ移動します。
 - Actions の Edit / Delete を使用します。
 
@@ -25,6 +45,12 @@
 - Edit loads existing data.
 - Required fields: Task Name, Assigned To.
 - % Complete accepts 0-100.
+- Due Date must be on or after Start Date.
+- Invalid fields are highlighted and focus moves to the first field with an error.
+- Task Name and Description show live character guidance.
+- Start Date, Due Date, and % Complete display inline helper guidance.
+- Keyboard focus is shown clearly on interactive controls.
+- Form fields are linked to helper and error messages for clearer accessibility support.
 - Confirm button validates and moves to Confirm page.
 
 ### 日本語
@@ -32,27 +58,33 @@
 - Edit は既存データを読み込みます。
 - 必須: Task Name, Assigned To。
 - % Complete は 0-100 を受け付けます。
+- Due Date は Start Date 以降である必要があります。
+- エラー時は該当フィールドが強調表示され、最初のエラー項目にフォーカスが移動します。
+- Task Name と Description は文字数ガイダンスをリアルタイム表示します。
+- Start Date、Due Date、% Complete には補助ガイダンスが表示されます。
+- キーボード操作時のフォーカス表示を明確にしています。
+- フォーム項目は補助文言とエラーメッセージに関連付けられています。
 - Confirm で検証して確認画面へ移動します。
 
 ## 3. Confirm Page (confirm.html)
 ### English
-- Shows read-only values.
+- Shows read-only values grouped by Basic Information, Schedule, and Progress.
 - Save persists the task to IndexedDB.
 - Back returns to the form with previous inputs.
 
 ### 日本語
-- 入力内容を読み取り専用で表示します。
+- 入力内容を Basic Information、Schedule、Progress の単位で読み取り専用表示します。
 - Save で IndexedDB に保存します。
 - Back でフォームに戻り入力を保持します。
 
 ## 4. Complete Page (complete.html)
 ### English
-- Shows saved task.
+- Shows saved task with a success summary banner.
 - Back returns to list.
 - Edit opens the same task in edit mode.
 
 ### 日本語
-- 保存済みタスクを表示します。
+- 保存済みタスクを成功メッセージ付きで表示します。
 - Back で一覧に戻ります。
 - Edit で同じタスクを編集します。
 

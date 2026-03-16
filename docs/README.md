@@ -57,6 +57,7 @@ This package contains a pure HTML/CSS/JavaScript tasklist application. There is 
 - JavaScript 有効
 
 ## Included Documents (EN)
+- `DESIGN_GUIDELINES.md`
 - `USER_GUIDE.md`
 - `DATA_GUIDE.md`
 - `TECHNICAL_OVERVIEW.md`
@@ -72,6 +73,7 @@ This package contains a pure HTML/CSS/JavaScript tasklist application. There is 
 - `SECURITY_PRIVACY.md`
 
 ## 含まれるドキュメント (JA)
+- `DESIGN_GUIDELINES.md`
 - `USER_GUIDE.md`
 - `DATA_GUIDE.md`
 - `TECHNICAL_OVERVIEW.md`

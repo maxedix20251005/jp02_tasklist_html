@@ -6,53 +6,71 @@
     <title>Task Saved</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
-  <body class="theme-green" data-page="complete">
-    <div class="page">
-      <div class="title">Task Saved</div>
-      <div class="subtitle">Your task has been saved successfully.</div>
-      <div class="card">
-        <div class="form-row">
-          <label>Task Name</label>
-          <div class="readonly-box w-wide" id="completeTitle"></div>
-        </div>
-        <div class="form-row">
-          <label>Assigned To</label>
-          <div class="readonly-box w-wide" id="completeAuthor"></div>
-        </div>
-        <div class="form-row">
-          <label>Status</label>
-          <div class="readonly-box w-mid" id="completeStatus"></div>
-        </div>
-        <div class="form-row">
-          <label>Priority</label>
-          <div class="readonly-box w-mid" id="completePriority"></div>
-        </div>
-        <div class="form-row">
-          <label>Start Date</label>
-          <div class="readonly-box w-date" id="completeStart"></div>
-        </div>
-        <div class="form-row">
-          <label>Due Date</label>
-          <div class="readonly-box w-date" id="completeDue"></div>
-        </div>
-        <div class="form-row">
-          <label>% Complete</label>
-          <div class="readonly-box w-small" id="completePercent"></div>
-        </div>
-        <div class="form-row">
-          <label>RAG</label>
-          <div class="readonly-box w-small rag-box">
-            <span class="rag" id="completeRag"></span>
+  <body data-page="complete">
+    <div class="app-shell">
+      <div class="page">
+        <header class="page-header compact">
+          <div class="page-header-copy">
+            <div class="eyebrow">Saved</div>
+            <h1 class="title">Task Saved</h1>
+            <p class="subtitle">The task has been stored successfully and is ready for review or further editing.</p>
           </div>
-        </div>
-        <div class="form-row">
-          <label>Description</label>
-          <div class="readonly-box w-textarea" id="completeDetail"></div>
-        </div>
-        <div class="button-row">
-          <a class="btn btn-secondary" href="index.html">Back</a>
-          <a class="btn btn-primary" id="completeEdit" href="#">Edit</a>
-        </div>
+          <div class="header-meta">
+            <div class="meta-chip">Save Completed</div>
+          </div>
+        </header>
+        <section class="surface card detail-grid">
+          <div class="success-banner">
+            <h2 class="success-title">Save completed successfully</h2>
+            <p class="success-copy">Review the saved values below, return to the task list, or reopen this record in edit mode.</p>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Task Name</div>
+            <div class="readonly-box w-wide" id="completeTitle"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Assigned To</div>
+            <div class="readonly-box w-wide" id="completeAuthor"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Category</div>
+            <div class="readonly-box w-mid" id="completeCategory"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Status</div>
+            <div class="readonly-box w-mid" id="completeStatus"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Priority</div>
+            <div class="readonly-box w-mid" id="completePriority"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Start Date</div>
+            <div class="readonly-box w-date" id="completeStart"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Due Date</div>
+            <div class="readonly-box w-date" id="completeDue"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">% Complete</div>
+            <div class="readonly-box w-small" id="completePercent"></div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">RAG</div>
+            <div class="readonly-box w-small rag-box">
+              <span class="rag" id="completeRag"></span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="static-label">Description</div>
+            <div class="readonly-box multiline w-textarea" id="completeDetail"></div>
+          </div>
+          <div class="button-row">
+            <a class="btn btn-secondary" href="index.html">Back</a>
+            <a class="btn btn-primary" id="completeEdit" href="#">Edit</a>
+          </div>
+        </section>
       </div>
     </div>
     <script src="assets/app.js"></script>

@@ -6,93 +6,113 @@
     <title>Task Form</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
-  <body class="theme-green" data-page="create">
-    <div class="page">
-      <div class="title" id="formTitle">New Task</div>
-      <div class="card">
-        <form id="todoForm" novalidate>
-          <input type="hidden" name="no" />
-          <div class="form-row">
-            <label for="title">Task Name</label>
-            <div>
-              <input id="title" class="input-text" type="text" name="title" />
-              <div class="error" data-error-for="title"></div>
-            </div>
+  <body data-page="create">
+    <div class="app-shell">
+      <div class="page">
+        <header class="page-header compact">
+          <div class="page-header-copy">
+            <div class="eyebrow">Task Editor</div>
+            <h1 class="title" id="formTitle">New Task</h1>
+            <p class="subtitle">
+              Capture assignment, schedule, and progress details in a consistent entry flow.
+            </p>
           </div>
-          <div class="form-row">
-            <label for="author">Assigned To</label>
-            <div>
-              <input id="author" class="input-text" type="text" name="author" />
-              <div class="error" data-error-for="author"></div>
-            </div>
+          <div class="header-meta">
+            <div class="meta-chip">Validation Ready</div>
           </div>
-          <div class="form-row">
-            <label for="categoryId">Category</label>
-            <div>
-              <select id="categoryId" class="input-mid" name="categoryId"></select>
+        </header>
+
+        <section class="surface card">
+          <form id="todoForm" novalidate class="form-grid">
+            <input type="hidden" name="no" />
+            <div class="form-row">
+              <label for="title">Task Name</label>
+              <div>
+                <input id="title" class="input-text w-wide" type="text" name="title" aria-describedby="titleHint titleError" />
+                <div class="field-hint" id="titleHint">Use a concise, descriptive task title. 0 / 100</div>
+                <div class="error" id="titleError" data-error-for="title" aria-live="polite"></div>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="status">Status</label>
-            <div>
-              <select id="status" class="input-mid" name="status">
-                <option value="Not Started">Not Started</option>
-                <option value="In Progress">In Progress</option>
-                <option value="On Hold">On Hold</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-                <option value="Merged">Merged</option>
-              </select>
+            <div class="form-row">
+              <label for="author">Assigned To</label>
+              <div>
+                <input id="author" class="input-text w-wide" type="text" name="author" aria-describedby="authorError" />
+                <div class="error" id="authorError" data-error-for="author" aria-live="polite"></div>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="priority">Priority</label>
-            <div>
-              <select id="priority" class="input-mid" name="priority">
-                <option value="Critical">Critical</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
+            <div class="form-row">
+              <label for="categoryId">Category</label>
+              <div>
+                <select id="categoryId" class="input-mid w-mid" name="categoryId"></select>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="startDate">Start Date</label>
-            <div>
-              <input id="startDate" class="input-date" type="date" name="startDate" />
+            <div class="form-row">
+              <label for="status">Status</label>
+              <div>
+                <select id="status" class="input-mid w-mid" name="status">
+                  <option value="Not Started">Not Started</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Merged">Merged</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="dueDate">Due Date</label>
-            <div>
-              <input id="dueDate" class="input-date" type="date" name="dueDate" />
+            <div class="form-row">
+              <label for="priority">Priority</label>
+              <div>
+                <select id="priority" class="input-mid w-mid" name="priority">
+                  <option value="Critical">Critical</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="percentComplete">% Complete</label>
-            <div>
-              <input id="percentComplete" class="input-small" type="number" min="0" max="100" name="percentComplete" />
-              <div class="error" data-error-for="percentComplete"></div>
+            <div class="form-row">
+              <label for="startDate">Start Date</label>
+              <div>
+                <input id="startDate" class="input-date w-date" type="date" name="startDate" aria-describedby="startDateHint" />
+                <div class="field-hint" id="startDateHint">Set the planned start of work.</div>
+              </div>
             </div>
-          </div>
-          <div class="form-row" id="ragRow">
-            <label>RAG</label>
-            <div class="readonly-box w-small rag-box">
-              <span class="rag" id="ragValue"></span>
+            <div class="form-row">
+              <label for="dueDate">Due Date</label>
+              <div>
+                <input id="dueDate" class="input-date w-date" type="date" name="dueDate" aria-describedby="dueDateHint dueDateError" />
+                <div class="field-hint" id="dueDateHint">Due Date should be the same as or later than Start Date.</div>
+                <div class="error" id="dueDateError" data-error-for="dueDate" aria-live="polite"></div>
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <label for="detail">Description</label>
-            <div>
-              <textarea id="detail" class="textarea" name="detail"></textarea>
-              <div class="error" data-error-for="detail"></div>
+            <div class="form-row">
+              <label for="percentComplete">% Complete</label>
+              <div>
+                <input id="percentComplete" class="input-small w-small" type="number" min="0" max="100" name="percentComplete" aria-describedby="percentHint percentError" />
+                <div class="field-hint" id="percentHint">Enter a value from 0 to 100.</div>
+                <div class="error" id="percentError" data-error-for="percentComplete" aria-live="polite"></div>
+              </div>
             </div>
+            <div class="form-row" id="ragRow">
+              <div class="static-label">RAG</div>
+              <div class="readonly-box w-small rag-box">
+                <span class="rag" id="ragValue"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="detail">Description</label>
+              <div>
+                <textarea id="detail" class="textarea w-textarea" name="detail" aria-describedby="detailHint detailError"></textarea>
+                <div class="field-hint" id="detailHint">Optional notes, scope, or handoff details. 0 / 500</div>
+                <div class="error" id="detailError" data-error-for="detail" aria-live="polite"></div>
+              </div>
+            </div>
+          </form>
+          <div class="button-row">
+            <button class="btn btn-primary" type="submit" form="todoForm">Confirm</button>
+            <a class="btn btn-secondary" href="index.html">Back</a>
           </div>
-        </form>
-        <div class="button-row">
-          <button class="btn btn-primary" type="submit" form="todoForm">Confirm</button>
-          <a class="btn btn-secondary" href="index.html">Back</a>
-        </div>
+        </section>
       </div>
     </div>
     <script src="assets/app.js"></script>

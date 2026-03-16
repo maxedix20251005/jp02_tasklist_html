@@ -6,57 +6,85 @@
     <title>Confirm Task</title>
     <link rel="stylesheet" href="assets/styles.css" />
   </head>
-  <body class="theme-green" data-page="confirm">
-    <div class="page">
-      <div class="title">Confirm Task</div>
-      <div class="card">
-        <div class="form-row">
-          <label>Task Name</label>
-          <div class="readonly-box w-wide" id="confirmTitle"></div>
-        </div>
-        <div class="form-row">
-          <label>Assigned To</label>
-          <div class="readonly-box w-wide" id="confirmAuthor"></div>
-        </div>
-        <div class="form-row">
-          <label>Category</label>
-          <div class="readonly-box w-mid" id="confirmCategory"></div>
-        </div>
-        <div class="form-row">
-          <label>Status</label>
-          <div class="readonly-box w-mid" id="confirmStatus"></div>
-        </div>
-        <div class="form-row">
-          <label>Priority</label>
-          <div class="readonly-box w-mid" id="confirmPriority"></div>
-        </div>
-        <div class="form-row">
-          <label>Start Date</label>
-          <div class="readonly-box w-date" id="confirmStart"></div>
-        </div>
-        <div class="form-row">
-          <label>Due Date</label>
-          <div class="readonly-box w-date" id="confirmDue"></div>
-        </div>
-        <div class="form-row">
-          <label>% Complete</label>
-          <div class="readonly-box w-small" id="confirmPercent"></div>
-        </div>
-        <div class="form-row">
-          <label>RAG</label>
-          <div class="readonly-box w-small rag-box">
-            <span class="rag" id="confirmRag"></span>
+  <body data-page="confirm">
+    <div class="app-shell">
+      <div class="page">
+        <header class="page-header compact">
+          <div class="page-header-copy">
+            <div class="eyebrow">Review</div>
+            <h1 class="title">Confirm Task</h1>
+            <p class="subtitle">Verify the values below before writing the record to local storage.</p>
           </div>
-        </div>
-        <div class="form-row">
-          <label>Description</label>
-          <div class="readonly-box w-textarea" id="confirmDetail"></div>
-        </div>
+        </header>
+        <section class="surface card sectioned-grid">
+          <section class="detail-section">
+            <div class="section-heading">
+              <h2 class="section-title">Basic Information</h2>
+              <p class="section-copy">Review task ownership and classification before saving.</p>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Task Name</div>
+              <div class="readonly-box w-wide" id="confirmTitle"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Assigned To</div>
+              <div class="readonly-box w-wide" id="confirmAuthor"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Category</div>
+              <div class="readonly-box w-mid" id="confirmCategory"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Description</div>
+              <div class="readonly-box multiline w-textarea" id="confirmDetail"></div>
+            </div>
+          </section>
 
-        <div class="button-row">
-          <button class="btn btn-primary" id="saveButton" type="button">Save</button>
-          <button class="btn btn-secondary" id="backButton" type="button">Back</button>
-        </div>
+          <section class="detail-section">
+            <div class="section-heading">
+              <h2 class="section-title">Schedule</h2>
+              <p class="section-copy">Check timing and delivery expectations for this task.</p>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Start Date</div>
+              <div class="readonly-box w-date" id="confirmStart"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Due Date</div>
+              <div class="readonly-box w-date" id="confirmDue"></div>
+            </div>
+          </section>
+
+          <section class="detail-section">
+            <div class="section-heading">
+              <h2 class="section-title">Progress</h2>
+              <p class="section-copy">Confirm the current execution state and progress signals.</p>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Status</div>
+              <div class="readonly-box w-mid" id="confirmStatus"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">Priority</div>
+              <div class="readonly-box w-mid" id="confirmPriority"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">% Complete</div>
+              <div class="readonly-box w-small" id="confirmPercent"></div>
+            </div>
+            <div class="form-row">
+              <div class="static-label">RAG</div>
+              <div class="readonly-box w-small rag-box">
+                <span class="rag" id="confirmRag"></span>
+              </div>
+            </div>
+          </section>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="saveButton" type="button">Save</button>
+            <button class="btn btn-secondary" id="backButton" type="button">Back</button>
+          </div>
+        </section>
       </div>
     </div>
     <script src="assets/app.js"></script>
