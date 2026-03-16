@@ -47,11 +47,11 @@
 
 ## TC-06 Pagination
 ### English
-- Steps: Open page 1, click page 2, then click `前へ` / `次へ`.
+- Steps: Open page 1, click page 2, then click `Prev` / `Next`.
 - Expected: 10 items are shown per page, the active page changes, and the summary updates.
 
 ### 日本語
-- 手順: 1ページ目を開き、ページ2、`前へ`、`次へ` を操作。
+- 手順: 1ページ目を開き、ページ2、`Prev`、`Next` を操作。
 - 期待結果: 1ページ10件表示、現在ページ強調、サマリ更新が行われる。
 
 ## TC-06A Due Date Alert
@@ -101,11 +101,11 @@
 
 ## TC-10A Bulk Delete
 ### English
-- Steps: Select multiple row checkboxes, optionally use select-all, click `選択した項目を削除`, then confirm.
+- Steps: Select multiple row checkboxes, optionally use select-all, click `Delete selected`, then confirm.
 - Expected: Only the selected records are deleted.
 
 ### 日本語
-- 手順: 複数行を選択し、必要に応じて全選択を使い、`選択した項目を削除` を実行して確認する。
+- 手順: 複数行を選択し、必要に応じて全選択を使い、`Delete selected` を実行して確認する。
 - 期待結果: 選択されたレコードのみ削除される。
 
 ## TC-11 Persistence

@@ -13,12 +13,13 @@
 - Edit remains prominent while Delete is visually lighter.
 - RAG renders as a circle with color-only meaning.
 - Pagination shows 10 items per page.
-- `前へ`, `次へ`, page links, active-page highlight, and total/range summary work correctly.
+- `Prev`, `Next`, page links, active-page highlight, and total/range summary work correctly.
+- A `Download CSV` button exports the current filtered list.
 - Overdue due dates are highlighted in red.
 - Due dates within 3 days are highlighted in yellow.
 - Row checkboxes can be selected individually.
 - Header checkbox selects and clears all visible rows.
-- `選択した項目を削除` shows a confirmation dialog and deletes selected records.
+- `Delete selected` shows a confirmation dialog and deletes selected records.
 - Empty result state shows reset and create actions.
 
 ### Create / Edit
@@ -60,12 +61,13 @@
 - Edit が主操作、Delete が軽い表示になっている。
 - RAG が色のみの円形表示になっている。
 - ページングは 1 ページ 10 件で表示される。
-- `前へ`、`次へ`、ページ番号、アクティブページ表示、総件数/表示範囲が正しく動作する。
+- `Prev`、`Next`、ページ番号、アクティブページ表示、総件数/表示範囲が正しく動作する。
+- `Download CSV` ボタンで現在の絞り込み結果を CSV ファイルとして出力できる。
 - 期限切れの Due Date が赤で表示される。
 - 3日以内の Due Date が黄で表示される。
 - 各行のチェックボックスを個別選択できる。
 - ヘッダーのチェックボックスで表示中の全選択/解除ができる。
-- `選択した項目を削除` で確認ダイアログ後に選択レコードが削除される。
+- `Delete selected` で確認ダイアログ後に選択レコードが削除される。
 - 該当データなしの状態でリセットと新規作成アクションが表示される。
 
 ### 作成 / 編集

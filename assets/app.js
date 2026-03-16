@@ -453,6 +453,59 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+function formatCsvValue(value) {
+  const str = value == null ? "" : String(value);
+  const escaped = str.replace(/"/g, '""');
+  return `"${escaped}"`;
+}
+
+function getCategoryName(categoryId, categories) {
+  const category = categories && categories.find((item) => item.id === categoryId);
+  return category ? category.name : "";
+}
+
+function downloadCsv(todos, categories) {
+  const headers = [
+    "ID",
+    "TaskName",
+    "Owner",
+    "Status",
+    "Start Date",
+    "Due Date",
+    "Complete %",
+    "Category",
+    "Description"
+  ];
+  const rows = todos.map((todo) => [
+    todo.no,
+    todo.taskName,
+    todo.assignedTo,
+    todo.status,
+    todo.startDate,
+    todo.dueDate,
+    Number.isFinite(todo.percentComplete) ? todo.percentComplete : "",
+    getCategoryName(todo.categoryId, categories),
+    todo.description || ""
+  ]);
+  const csv = [headers, ...rows]
+    .map((row) => row.map(formatCsvValue).join(","))
+    .join("\r\n");
+  const bom = "\uFEFF";
+  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  a.href = url;
+  a.download = `tasklist_${y}${m}${d}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function applyDefaults(todo) {
   if (!todo.status) {
     todo.status = "Not Started";
@@ -601,6 +654,11 @@ async function initIndex() {
     return matchesQuery && matchesCategory;
   });
 
+  const downloadCsvButton = document.getElementById("downloadCsvButton");
+  if (downloadCsvButton) {
+    downloadCsvButton.addEventListener("click", () => downloadCsv(filtered, categories));
+  }
+
   filtered.sort((a, b) => {
     const dir = sortDir === "desc" ? -1 : 1;
     const field = sortField;
@@ -726,7 +784,7 @@ async function initIndex() {
       if (selectedNos.length === 0) {
         return;
       }
-      if (!window.confirm(`選択した${selectedNos.length}件を削除しますか？`)) {
+      if (!window.confirm(`Delete ${selectedNos.length} selected task(s)?`)) {
         return;
       }
       const selectedSet = new Set(selectedNos);
@@ -768,13 +826,17 @@ async function initIndex() {
   const summary = document.getElementById("summary");
   const start = totalElements === 0 ? 0 : startIndex + 1;
   const end = totalElements === 0 ? 0 : Math.min(endIndex, totalElements);
-  summary.textContent = `\u5168${totalElements}\u4ef6\u4e2d ${start}-${end}\u4ef6`;
+  if (totalElements === 0) {
+    summary.textContent = "No tasks";
+  } else {
+    summary.textContent = `Showing ${start}-${end} of ${totalElements}`;
+  }
 
   const pagination = document.getElementById("pagination");
   pagination.innerHTML = "";
 
   if (totalPages > 1) {
-    const prevLink = buildPageLink("\u524d\u3078", page - 1, page === 0, sortField, sortDir, size, query);
+    const prevLink = buildPageLink("Prev", page - 1, page === 0, sortField, sortDir, size, query);
     pagination.appendChild(prevLink);
 
     for (let p = 0; p < totalPages; p += 1) {
@@ -785,7 +847,7 @@ async function initIndex() {
       pagination.appendChild(link);
     }
 
-    const nextLink = buildPageLink("\u6b21\u3078", page + 1, page + 1 >= totalPages, sortField, sortDir, size, query);
+    const nextLink = buildPageLink("Next", page + 1, page + 1 >= totalPages, sortField, sortDir, size, query);
     pagination.appendChild(nextLink);
   }
 

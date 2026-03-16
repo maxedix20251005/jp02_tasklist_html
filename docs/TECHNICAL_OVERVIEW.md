@@ -15,7 +15,9 @@
 - Show explicit active/inactive sort indicators.
 - Clamp long list values for readability in dense table layout.
 - Use shortened column labels and lighter destructive actions to reduce horizontal width pressure.
-- Render `前へ` / `次へ`, page-number links, and a total/range summary.
+- Render `Prev` / `Next`, page-number links, and a total/range summary.
+- Provide a CSV download button to export the current filtered list.
+- Responsive layout adjusts toolbar wrapping and hides less-critical columns on narrow viewports to improve mobile usability.
 - Render RAG as a compact circular color indicator.
 - Apply due-date alerts in the list: overdue in red, due within 3 days in yellow.
 - Support row selection, select-all for visible rows, and confirmed bulk deletion.
@@ -56,7 +58,7 @@
 - ソート状態を分かりやすい記号で表示する。
 - 長い文字列は一覧の可読性を保つために抑制表示する。
 - 列ラベルの短縮と破壊的操作の軽量表示により、横幅の圧迫を抑えている。
-- `前へ`、`次へ`、ページ番号、総件数/表示範囲を表示する。
+- `Prev`、`Next`、ページ番号、総件数/表示範囲を表示する。
 - RAG は小さな円形の色表示にしている。
 - Due Date は、期限切れを赤、3日以内を黄で強調表示する。
 - 行選択、表示中の全選択、確認付きの一括削除に対応する。

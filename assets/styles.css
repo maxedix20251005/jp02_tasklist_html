@@ -749,6 +749,50 @@ label,
   max-width: 110px;
 }
 
+/* Responsive enhancements for smaller screens */
+@media (max-width: 900px) {
+  .page {
+    padding: 0 16px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .toolbar-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .toolbar-actions .btn {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .table-scroll {
+    max-height: 58vh;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 10px 8px;
+  }
+
+  /* Hide less critical columns on narrow screens to improve table readability */
+  th:nth-child(5),
+  td:nth-child(5),
+  th:nth-child(11),
+  td:nth-child(11) {
+    display: none;
+  }
+}
+
 .w-mid {
   max-width: 240px;
 }
@@ -833,6 +877,7 @@ label,
 }
 
 @media (max-width: 960px) {
+
   .page-header,
   .toolbar,
   .summary-row {

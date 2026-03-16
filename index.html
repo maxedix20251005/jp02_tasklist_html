@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project Tasks</title>
-    <link rel="stylesheet" href="assets/styles.css" />
-  </head>
-  <body data-page="index">
-    <div class="app-shell">
-      <div class="page">
-        <header class="page-header">
-          <div class="page-header-copy">
-            <div class="eyebrow">Task Operations</div>
-            <h1 class="title">Project Tasks</h1>
-            <p class="subtitle">
-              Manage delivery work with a cleaner, more consistent interface for search,
-              status tracking, and action handling.
-            </p>
-          </div>
-          <div class="header-meta">
-            <div class="meta-chip">IndexedDB Storage</div>
-            <div class="meta-chip">List / Search / CRUD</div>
-          </div>
-        </header>
 
-        <section class="surface panel">
-          <div class="toolbar">
-            <form id="searchForm" class="toolbar-form">
-              <div class="field-group grow">
-                <label class="field-label" for="searchQuery">Task Search</label>
-                <input
-                  id="searchQuery"
-                  class="input-text"
-                  type="text"
-                  name="q"
-                  placeholder="Search by task name"
-                />
-              </div>
-              <div class="field-group">
-                <label class="field-label" for="categorySelect">Category</label>
-                <select class="page-select" name="categoryId" id="categorySelect"></select>
-              </div>
-              <input type="hidden" name="sort" />
-              <input type="hidden" name="dir" />
-              <input type="hidden" name="page" value="0" />
-              <input type="hidden" name="size" value="10" />
-              <button class="btn btn-primary" type="submit">Search</button>
-              <a class="btn btn-secondary" id="clearLink" href="index.html">Reset</a>
-            </form>
-            <div class="toolbar-actions">
-              <button class="btn btn-secondary" id="bulkDeleteButton" type="button" disabled>選択した項目を削除</button>
-              <a class="btn btn-primary" href="create.html">New Task</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Tasks</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body data-page="index">
+  <div class="app-shell">
+    <div class="page">
+      <header class="page-header">
+        <div class="page-header-copy">
+          <div class="eyebrow">Task Operations</div>
+          <h1 class="title">Project Tasks</h1>
+          <p class="subtitle">
+            Manage delivery work with a cleaner, more consistent interface for search,
+            status tracking, and action handling.
+          </p>
+        </div>
+        <div class="header-meta">
+          <div class="meta-chip">IndexedDB Storage</div>
+          <div class="meta-chip">List / Search / CRUD</div>
+        </div>
+      </header>
+
+      <section class="surface panel">
+        <div class="toolbar">
+          <form id="searchForm" class="toolbar-form">
+            <div class="field-group grow">
+              <label class="field-label" for="searchQuery">Task Search</label>
+              <input id="searchQuery" class="input-text" type="text" name="q" placeholder="Search by task name" />
             </div>
-          </div>
-
-          <div class="table-wrap">
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th class="checkbox-col"><input id="selectAllRows" type="checkbox" aria-label="Select all rows" /></th>
-                    <th><a href="#" data-sort="no">No <span data-sort-indicator="no"></span></a></th>
-                    <th><a href="#" data-sort="taskName">Task Name <span data-sort-indicator="taskName"></span></a></th>
-                    <th><a href="#" data-sort="assignedTo">Owner <span data-sort-indicator="assignedTo"></span></a></th>
-                    <th>Category</th>
-                    <th><a href="#" data-sort="status">Status <span data-sort-indicator="status"></span></a></th>
-                    <th><a href="#" data-sort="priority">Priority <span data-sort-indicator="priority"></span></a></th>
-                    <th><a href="#" data-sort="startDate">Start <span data-sort-indicator="startDate"></span></a></th>
-                    <th><a href="#" data-sort="dueDate">Due <span data-sort-indicator="dueDate"></span></a></th>
-                    <th><a href="#" data-sort="percentComplete">% <span data-sort-indicator="percentComplete"></span></a></th>
-                    <th>RAG</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="todoTable"></tbody>
-              </table>
+            <div class="field-group">
+              <label class="field-label" for="categorySelect">Category</label>
+              <select class="page-select" name="categoryId" id="categorySelect"></select>
             </div>
+            <input type="hidden" name="sort" />
+            <input type="hidden" name="dir" />
+            <input type="hidden" name="page" value="0" />
+            <input type="hidden" name="size" value="10" />
+            <button class="btn btn-primary" type="submit">Search</button>
+            <a class="btn btn-secondary" id="clearLink" href="index.html">Reset</a>
+          </form>
+          <div class="toolbar-actions">
+            <button class="btn btn-secondary" id="bulkDeleteButton" type="button" disabled>Delete selected</button>
+            <button class="btn btn-secondary" id="downloadCsvButton" type="button">Download CSV</button>
+            <a class="btn btn-primary" href="create.html">New Task</a>
           </div>
+        </div>
 
-          <div class="summary-row">
-            <div class="summary" id="summary"></div>
-            <div class="pagination" id="pagination"></div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="checkbox-col"><input id="selectAllRows" type="checkbox" aria-label="Select all rows" />
+                  </th>
+                  <th><a href="#" data-sort="no">No <span data-sort-indicator="no"></span></a></th>
+                  <th><a href="#" data-sort="taskName">Task Name <span data-sort-indicator="taskName"></span></a></th>
+                  <th><a href="#" data-sort="assignedTo">Owner <span data-sort-indicator="assignedTo"></span></a></th>
+                  <th>Category</th>
+                  <th><a href="#" data-sort="status">Status <span data-sort-indicator="status"></span></a></th>
+                  <th><a href="#" data-sort="priority">Priority <span data-sort-indicator="priority"></span></a></th>
+                  <th><a href="#" data-sort="startDate">Start <span data-sort-indicator="startDate"></span></a></th>
+                  <th><a href="#" data-sort="dueDate">Due <span data-sort-indicator="dueDate"></span></a></th>
+                  <th><a href="#" data-sort="percentComplete">% <span data-sort-indicator="percentComplete"></span></a>
+                  </th>
+                  <th>RAG</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="todoTable"></tbody>
+            </table>
           </div>
-        </section>
-      </div>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary" id="summary"></div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </section>
     </div>
+  </div>
 
-    <noscript>
-      <div class="noscript">This app needs JavaScript enabled.</div>
-    </noscript>
+  <noscript>
+    <div class="noscript">This app needs JavaScript enabled.</div>
+  </noscript>
 
-    <script src="assets/app.js"></script>
-  </body>
+  <script src="assets/app.js"></script>
+</body>
+
 </html>

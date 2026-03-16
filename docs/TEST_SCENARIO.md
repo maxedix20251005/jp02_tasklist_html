@@ -16,6 +16,7 @@
 - Combine search + category filter and verify.
 - Use a filter combination with no matches and verify the empty state actions appear.
 - Verify overdue due dates appear in red and due-soon dates appear in yellow.
+- Click the `Download CSV` button and verify a CSV file downloads with the expected columns (ID, TaskName, Owner, Status, Start Date, Due Date, Complete %).
 - Select multiple rows and verify bulk delete removes only the checked records after confirmation.
 
 ### 日本語
@@ -44,14 +45,14 @@
 ## 4. Pagination
 ### English
 - Confirm the list shows 10 items per page.
-- Click `前へ`, `次へ`, and page numbers to verify result changes.
+- Click `Prev`, `Next`, and page numbers to verify result changes.
 - Verify the current page is highlighted.
 - Verify the summary shows total count and visible range.
 - Scroll a long result set and verify the header remains visible.
 
 ### 日本語
 - 1 ページ 10 件表示になることを確認。
-- `前へ`、`次へ`、ページ番号で結果が切り替わることを確認。
+- `Prev`、`Next`、ページ番号で結果が切り替わることを確認。
 - 現在ページが強調表示されることを確認。
 - 総件数と表示範囲が表示されることを確認。
 - 一覧をスクロールしてもヘッダーが見えることを確認。
