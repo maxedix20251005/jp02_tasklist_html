@@ -83,9 +83,10 @@ Folder naming rules:
 - Header labels are shortened on desktop to reduce width pressure.
 - Delete is styled as a lighter destructive action while Edit remains primary.
 - RAG is shown as a compact circular color marker without text.
-- Pagination is fixed to 10 items per page with `前へ`, `次へ`, page links, and total/range summary.
+- Pagination is fixed to 10 items per page with `Prev`, `Next`, page links, and total/range summary.
 - Due dates are highlighted red when overdue and yellow when due within 3 days.
 - Bulk delete is supported with per-row checkboxes, select-all for visible rows, and confirmation.
+- On narrow/mobile screens (≤ 600px), the table is hidden and replaced by a card view; inputs are allowed to shrink to prevent horizontal overflow.
 
 ## 16. Current Accessibility UX
 - Keyboard focus is visually strengthened on major interactive controls.

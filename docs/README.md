@@ -10,15 +10,17 @@ This package contains a pure HTML/CSS/JavaScript tasklist application. There is 
 1. Open `index.html` in a browser.
 2. Use the toolbar to search or filter.
 3. Use the `Download CSV` button to export the current filtered list (columns: ID, TaskName, Owner, Status, Start Date, Due Date, Complete %, Category, Description).
-4. Click `New Task` to create a task.
-5. Follow Confirm -> Save.
+4. On narrow screens (≤ 600px), the list switches to a mobile-friendly card view to improve usability.
+5. Click `New Task` to create a task.
+6. Follow Confirm -> Save.
 
 ## クイックスタート (JA)
 1. `index.html` をブラウザで開きます。
 2. ツールバーで検索・絞り込みを行います。
 3. `Download CSV` を使って現在の絞り込み結果を出力します。
-4. `New Task` で新規作成します。
-5. Confirm -> Save で保存します。
+4. 画面が狭い場合（600px未満）はカードビューに切り替わり、モバイルでも使いやすくなります。
+5. `New Task` で新規作成します。
+6. Confirm -> Save で保存します。
 
 ## File Structure (EN)
 - `index.html` Task list view

@@ -288,7 +288,27 @@ const SORT_FIELDS = new Set([
 
 const PAGE_SIZE = 10;
 
+let useInMemoryDb = false;
+let inMemoryStores = null;
+
+function ensureInMemoryStores() {
+  if (!inMemoryStores) {
+    inMemoryStores = {
+      [STORE_TODOS]: [...DEFAULT_TODOS],
+      [STORE_CATEGORIES]: [...DEFAULT_CATEGORIES],
+      [STORE_STATE]: []
+    };
+  }
+  return inMemoryStores;
+}
+
 function openDb() {
+  if (useInMemoryDb || typeof indexedDB === "undefined") {
+    useInMemoryDb = true;
+    ensureInMemoryStores();
+    return Promise.resolve(null);
+  }
+
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
     request.onupgradeneeded = () => {
@@ -304,11 +324,20 @@ function openDb() {
       }
     };
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onerror = () => {
+      useInMemoryDb = true;
+      ensureInMemoryStores();
+      // Fall back to in-memory storage when IndexedDB fails (e.g., file:// restrictions)
+      resolve(null);
+    };
   });
 }
 
 function getAllFrom(storeName) {
+  if (useInMemoryDb) {
+    const stores = ensureInMemoryStores();
+    return Promise.resolve([...((stores[storeName] || []))]);
+  }
   return openDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, "readonly");
     const store = tx.objectStore(storeName);
@@ -319,6 +348,13 @@ function getAllFrom(storeName) {
 }
 
 function getItem(storeName, key) {
+  if (useInMemoryDb) {
+    const stores = ensureInMemoryStores();
+    const store = stores[storeName] || [];
+    const keyField = storeName === STORE_STATE ? "key" : storeName === STORE_CATEGORIES ? "id" : "no";
+    const found = store.find((item) => item && item[keyField] === key);
+    return Promise.resolve(found || null);
+  }
   return openDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, "readonly");
     const store = tx.objectStore(storeName);
@@ -329,6 +365,19 @@ function getItem(storeName, key) {
 }
 
 function putItem(storeName, item) {
+  if (useInMemoryDb) {
+    const stores = ensureInMemoryStores();
+    const store = stores[storeName] || [];
+    const key = storeName === STORE_STATE ? "key" : storeName === STORE_CATEGORIES ? "id" : "no";
+    const idx = store.findIndex((existing) => existing && existing[key] === item[key]);
+    if (idx === -1) {
+      store.push(item);
+    } else {
+      store[idx] = item;
+    }
+    stores[storeName] = store;
+    return Promise.resolve();
+  }
   return openDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, "readwrite");
     const store = tx.objectStore(storeName);
@@ -339,6 +388,11 @@ function putItem(storeName, item) {
 }
 
 function clearStore(storeName) {
+  if (useInMemoryDb) {
+    const stores = ensureInMemoryStores();
+    stores[storeName] = [];
+    return Promise.resolve();
+  }
   return openDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, "readwrite");
     const store = tx.objectStore(storeName);
@@ -349,6 +403,13 @@ function clearStore(storeName) {
 }
 
 function deleteItem(storeName, key) {
+  if (useInMemoryDb) {
+    const stores = ensureInMemoryStores();
+    const store = stores[storeName] || [];
+    const keyName = storeName === STORE_STATE ? "key" : storeName === STORE_CATEGORIES ? "id" : "no";
+    stores[storeName] = store.filter((item) => item && item[keyName] !== key);
+    return Promise.resolve();
+  }
   return openDb().then((db) => new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, "readwrite");
     const store = tx.objectStore(storeName);
@@ -381,11 +442,7 @@ async function saveCategories(categories) {
 
 async function loadTodos() {
   const todos = await getAllFrom(STORE_TODOS);
-  if (todos.length > 0) {
-    return todos;
-  }
-  await saveTodos(DEFAULT_TODOS);
-  return [...DEFAULT_TODOS];
+  return todos;
 }
 
 async function saveTodos(todos) {
@@ -694,23 +751,102 @@ async function initIndex() {
   const endIndex = startIndex + size;
   const pageItems = filtered.slice(startIndex, endIndex);
 
-  const table = document.getElementById("todoTable");
+  const cardView = document.getElementById("cardView");
+
+  // Build the desktop table view (kept in the DOM for larger screens) and wire up controls.
+  const table = document.querySelector(".table-wrap table");
+  const tableBody = document.getElementById("todoTable");
   const selectAllRows = document.getElementById("selectAllRows");
   const bulkDeleteButton = document.getElementById("bulkDeleteButton");
-  table.innerHTML = "";
-  if (selectAllRows) {
-    selectAllRows.checked = false;
-    selectAllRows.indeterminate = false;
-  }
-  if (bulkDeleteButton) {
-    bulkDeleteButton.disabled = true;
+
+  if (tableBody) {
+    tableBody.innerHTML = "";
+    pageItems.forEach((todo) => {
+      const row = document.createElement("tr");
+
+      const checkboxCell = document.createElement("td");
+      checkboxCell.className = "checkbox-col";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "row-checkbox";
+      checkbox.setAttribute("data-select-row", String(todo.no));
+      checkboxCell.appendChild(checkbox);
+      row.appendChild(checkboxCell);
+
+      const noCell = document.createElement("td");
+      noCell.textContent = String(todo.no || "");
+      row.appendChild(noCell);
+
+      const nameCell = document.createElement("td");
+      const nameLink = document.createElement("a");
+      nameLink.className = "task-link";
+      nameLink.href = `view.html${buildQuery({ no: todo.no })}`;
+      nameLink.textContent = todo.taskName || "";
+      nameCell.appendChild(nameLink);
+      row.appendChild(nameCell);
+
+      const ownerCell = document.createElement("td");
+      ownerCell.textContent = todo.assignedTo || "";
+      row.appendChild(ownerCell);
+
+      const categoryCell = document.createElement("td");
+      categoryCell.innerHTML = renderCategoryBadge(todo, categories);
+      row.appendChild(categoryCell);
+
+      const statusCell = document.createElement("td");
+      statusCell.innerHTML = renderStatusBadge(todo.status);
+      row.appendChild(statusCell);
+
+      const priorityCell = document.createElement("td");
+      priorityCell.innerHTML = renderPriorityBadge(todo.priority);
+      row.appendChild(priorityCell);
+
+      const startCell = document.createElement("td");
+      startCell.textContent = formatDate(todo.startDate);
+      row.appendChild(startCell);
+
+      const dueCell = document.createElement("td");
+      dueCell.innerHTML = renderDueDateCell(todo.dueDate);
+      row.appendChild(dueCell);
+
+      const percentCell = document.createElement("td");
+      percentCell.textContent = Number.isFinite(todo.percentComplete) ? String(todo.percentComplete) : "";
+      row.appendChild(percentCell);
+
+      const ragCell = document.createElement("td");
+      const rag = document.createElement("span");
+      rag.className = `rag ${getRagClass(todo)}`;
+      rag.title = getRagStatus(todo);
+      rag.setAttribute("aria-label", getRagStatus(todo));
+      ragCell.appendChild(rag);
+      row.appendChild(ragCell);
+
+      const actionsCell = document.createElement("td");
+      actionsCell.className = "actions";
+
+      const editLink = document.createElement("a");
+      editLink.className = "btn btn-primary";
+      editLink.href = `create.html${buildQuery({ no: todo.no })}`;
+      editLink.textContent = "Edit";
+      actionsCell.appendChild(editLink);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.className = "btn btn-danger-subtle";
+      deleteButton.type = "button";
+      deleteButton.setAttribute("data-delete", String(todo.no));
+      deleteButton.textContent = "Delete";
+      actionsCell.appendChild(deleteButton);
+
+      row.appendChild(actionsCell);
+      tableBody.appendChild(row);
+    });
   }
 
+  cardView.innerHTML = "";
   if (pageItems.length === 0) {
-    const row = document.createElement("tr");
-    const cell = document.createElement("td");
-    cell.colSpan = 12;
-    cell.innerHTML = `
+    const emptyCard = document.createElement("div");
+    emptyCard.className = "card";
+    emptyCard.innerHTML = `
       <div class="empty-state">
         <p class="empty-state-title">No tasks found</p>
         <p class="empty-state-copy">Try changing the search text, selecting a different category, or resetting the current filters.</p>
@@ -720,36 +856,84 @@ async function initIndex() {
         </div>
       </div>
     `;
-    row.appendChild(cell);
-    table.appendChild(row);
+    cardView.appendChild(emptyCard);
   } else {
     pageItems.forEach((todo) => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td class="checkbox-col"><input class="row-checkbox" data-select-row="${todo.no}" type="checkbox" aria-label="Select task ${todo.no}" /></td>
-        <td>${todo.no}</td>
-        <td><a class="task-link" href="view.html${buildQuery({ no: todo.no })}">${todo.taskName}</a></td>
-        <td><span class="cell-text" title="${todo.assignedTo || ""}">${todo.assignedTo || ""}</span></td>
-        <td>${renderCategoryBadge(todo, categories)}</td>
-        <td>${renderStatusBadge(todo.status)}</td>
-        <td>${renderPriorityBadge(todo.priority)}</td>
-        <td>${formatDate(todo.startDate)}</td>
-        <td>${renderDueDateCell(todo.dueDate)}</td>
-        <td>${Number.isFinite(todo.percentComplete) ? todo.percentComplete : ""}</td>
-        <td><span class="rag ${getRagClass(todo)}" title="${getRagStatus(todo)}" aria-label="${getRagStatus(todo)}"></span></td>
-        <td>
-          <div class="actions">
-            <a class="btn btn-primary" href="create.html${buildQuery({ no: todo.no })}">Edit</a>
-            <button class="btn btn-danger-subtle" data-delete="${todo.no}" type="button">Delete</button>
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title"><a class="task-link" href="view.html${buildQuery({ no: todo.no })}">${todo.taskName}</a></h3>
+          <span class="card-rag ${getRagClass(todo)}" title="${getRagStatus(todo)}" aria-label="${getRagStatus(todo)}"></span>
+        </div>
+        <div class="card-meta">
+          <div class="card-meta-item">
+            <span class="card-meta-label">ID</span>
+            <span class="card-meta-value">${todo.no}</span>
           </div>
-        </td>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Owner</span>
+            <span class="card-meta-value">${todo.assignedTo || ""}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Category</span>
+            <span class="card-meta-value">${renderCategoryBadge(todo, categories)}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Status</span>
+            <span class="card-meta-value">${renderStatusBadge(todo.status)}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Priority</span>
+            <span class="card-meta-value">${renderPriorityBadge(todo.priority)}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Start</span>
+            <span class="card-meta-value">${formatDate(todo.startDate)}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">Due</span>
+            <span class="card-meta-value">${renderDueDateCell(todo.dueDate)}</span>
+          </div>
+          <div class="card-meta-item">
+            <span class="card-meta-label">% Complete</span>
+            <span class="card-meta-value">${Number.isFinite(todo.percentComplete) ? todo.percentComplete : ""}</span>
+          </div>
+        </div>
+        ${todo.description ? `<p class="card-description">${todo.description}</p>` : ""}
+        <div class="card-actions">
+          <a class="btn btn-primary" href="create.html${buildQuery({ no: todo.no })}">Edit</a>
+          <button class="btn btn-danger-subtle" data-delete="${todo.no}" type="button">Delete</button>
+        </div>
       `;
-      table.appendChild(row);
+      cardView.appendChild(card);
     });
   }
 
-  const rowCheckboxes = Array.from(table.querySelectorAll("[data-select-row]"));
+  // Attach delete handlers for cards
+  cardView.querySelectorAll("[data-delete]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const no = Number(button.getAttribute("data-delete"));
+      if (!Number.isFinite(no)) {
+        return;
+      }
+      if (!window.confirm("Delete this task?")) {
+        return;
+      }
+      const updated = (await loadTodos()).filter((todo) => todo.no !== no);
+      await saveTodos(updated);
+      window.location.href = `index.html${buildQuery({
+        q: query.q,
+        categoryId: query.categoryId,
+        sort: sortField,
+        dir: sortDir,
+        page,
+        size
+      })}`;
+    });
+  });
+
+  const rowCheckboxes = Array.from((table ? table.querySelectorAll("[data-select-row]") : []));
 
   function updateSelectionState() {
     const checkedCount = rowCheckboxes.filter((checkbox) => checkbox.checked).length;
@@ -801,7 +985,7 @@ async function initIndex() {
     });
   }
 
-  table.querySelectorAll("[data-delete]").forEach((button) => {
+  (table ? table.querySelectorAll("[data-delete]") : []).forEach((button) => {
     button.addEventListener("click", async () => {
       const no = Number(button.getAttribute("data-delete"));
       if (!Number.isFinite(no)) {
@@ -1282,9 +1466,74 @@ async function init() {
   }
 }
 
+function initModal() {
+  // Technical Details Modal
+  const techModal = document.getElementById("techDetailsModal");
+  const techOpenButton = document.getElementById("techDetailsButton");
+  const techCloseButton = document.getElementById("closeTechDetailsModal");
+  const techCloseBtn = document.getElementById("closeTechDetailsModalBtn");
+
+  if (techModal && techOpenButton) {
+    function openTechModal() {
+      techModal.removeAttribute("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeTechModal() {
+      techModal.setAttribute("hidden", "");
+      document.body.style.overflow = "";
+    }
+
+    techOpenButton.addEventListener("click", openTechModal);
+    techCloseButton.addEventListener("click", closeTechModal);
+    techCloseBtn.addEventListener("click", closeTechModal);
+    techModal.querySelector(".modal-overlay").addEventListener("click", closeTechModal);
+  }
+
+  // User Guide Modal
+  const userModal = document.getElementById("userGuideModal");
+  const userOpenButton = document.getElementById("userGuideButton");
+  const userCloseButton = document.getElementById("closeUserGuideModal");
+  const userCloseBtn = document.getElementById("closeUserGuideModalBtn");
+
+  if (userModal && userOpenButton) {
+    function openUserModal() {
+      userModal.removeAttribute("hidden");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeUserModal() {
+      userModal.setAttribute("hidden", "");
+      document.body.style.overflow = "";
+    }
+
+    userOpenButton.addEventListener("click", openUserModal);
+    userCloseButton.addEventListener("click", closeUserModal);
+    userCloseBtn.addEventListener("click", closeUserModal);
+    userModal.querySelector(".modal-overlay").addEventListener("click", closeUserModal);
+  }
+
+  // Close modals on Escape key
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      if (techModal && !techModal.hasAttribute("hidden")) {
+        techModal.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+      }
+      if (userModal && !userModal.hasAttribute("hidden")) {
+        userModal.setAttribute("hidden", "");
+        document.body.style.overflow = "";
+      }
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  initModal();
   init().catch((error) => {
     console.error(error);
-    alert("Failed to load data. Please refresh the page.");
+    const message = error && error.message ? error.message : String(error);
+    const stack = error && error.stack ? "\n" + error.stack : "";
+    alert("Failed to load data. Please refresh the page.\n\n" + message + stack);
   });
 });

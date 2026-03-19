@@ -18,6 +18,8 @@
 - Render `Prev` / `Next`, page-number links, and a total/range summary.
 - Provide a CSV download button to export the current filtered list.
 - Responsive layout adjusts toolbar wrapping and hides less-critical columns on narrow viewports to improve mobile usability.
+- Input controls shrink on very narrow viewports to prevent horizontal overflow.
+- On very narrow screens (under 600px), switches to card view for better touch interaction.
 - Render RAG as a compact circular color indicator.
 - Apply due-date alerts in the list: overdue in red, due within 3 days in yellow.
 - Support row selection, select-all for visible rows, and confirmed bulk deletion.
@@ -63,6 +65,8 @@
 - Due Date は、期限切れを赤、3日以内を黄で強調表示する。
 - 行選択、表示中の全選択、確認付きの一括削除に対応する。
 - 該当データがない場合は、次の行動を示す空状態を表示する。
+- レスポンシブレイアウトでツールバーの折り返しと重要度の低い列の非表示を行い、モバイルでの使いやすさを向上。
+- 非常に狭い画面（600px未満）では、タッチ操作に適したカードビューに切り替え。
 
 2. 作成/編集 -> 確認 -> 保存
 - 必須項目、入力範囲、日付の前後関係を検証。

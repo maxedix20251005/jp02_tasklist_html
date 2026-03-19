@@ -22,6 +22,16 @@
 - `Delete selected` shows a confirmation dialog and deletes selected records.
 - Empty result state shows reset and create actions.
 
+### Responsive / Mobile Layout
+- On desktop (> 600px), the table view is visible and the card view is hidden.
+- On narrow screens (≤ 600px), the table is hidden and the card view displays tasks as individual cards.
+- On narrow screens, input controls (search, category dropdown, buttons) shrink correctly without causing horizontal overflow.
+- On tablet/mobile, toolbar buttons wrap and remain accessible.
+- Card view shows all essential fields: task name, owner, category, status, priority, dates, percent complete, and actions.
+- Card view actions (Edit/Delete) remain functional.
+- Pagination works in both table and card views.
+- On mobile devices, the layout is touch-friendly and does not require horizontal scrolling.
+
 ### Create / Edit
 - Validation for required fields.
 - % Complete accepts 0-100.
@@ -69,6 +79,16 @@
 - ヘッダーのチェックボックスで表示中の全選択/解除ができる。
 - `Delete selected` で確認ダイアログ後に選択レコードが削除される。
 - 該当データなしの状態でリセットと新規作成アクションが表示される。
+
+### レスポンシブ / モバイルレイアウト
+- デスクトップ（600px超）ではテーブルビューが表示され、カードビューは非表示。
+- 狭い画面（600px以下）ではテーブルが非表示になり、カードビューがタスクをカード形式で表示。
+- 狭い画面で入力欄（検索、カテゴリドロップダウン、ボタン）が正しく縮小され、横スクロールが発生しない。
+- タブレット/モバイルでツールバーボタンが折り返され、操作可能。
+- カードビューでタスク名、担当者、カテゴリ、ステータス、優先度、日付、完了率、操作ボタンがすべて表示される。
+- カードビューの操作（Edit/Delete）が機能する。
+- ページングはテーブルビューとカードビュー両方で機能する。
+- モバイルデバイスでレイアウトがタッチフレンドリーで、横スクロール不要。
 
 ### 作成 / 編集
 - 必須項目の検証が動作する。

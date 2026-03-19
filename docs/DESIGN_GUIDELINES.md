@@ -3,7 +3,7 @@
 ## English
 
 ### Purpose
-This document defines the current UI color scheme used by this project after the visual refresh.  
+This document defines the current UI color scheme used by this project after the visual refresh.
 It should be used as the shared reference when discussing design updates, future screens, and UI consistency.
 
 ### Design Direction
@@ -107,7 +107,7 @@ When adding or changing screens:
 ## 日本語
 
 ### 目的
-本ドキュメントは、本プロジェクトで現在採用している UI の配色ルールを定義するものです。  
+本ドキュメントは、本プロジェクトで現在採用している UI の配色ルールを定義するものです。
 画面追加や改修時に、デザイン認識のズレを防ぐための共通基準として使用してください。
 
 ### デザイン方針
@@ -205,3 +205,103 @@ When adding or changing screens:
 - 新しい色を追加する前に、既存トークンの再利用を優先する。
 - 新しいセマンティックカラーが必要な場合は、理由を先に明文化する。
 - システム上の合意がない限り、HTML や JavaScript に場当たり的な色指定を入れない。
+
+---
+
+## Modals and Dialogs
+
+### Purpose
+Modals present focused information or require user confirmation without leaving the current page context. They should be used sparingly and only when necessary.
+
+### When to Use Modals
+- Displaying detailed supplementary information (e.g., Technical Details)
+- Requiring explicit confirmation before a critical action
+- Presenting form input that cannot fit in the main layout
+- Showing contextual help or documentation
+
+### Visual Treatment
+- **Overlay:** Semi-transparent dark background (50% opacity) to focus attention on the modal
+- **Content Box:** White background (`var(--color-surface)`) with rounded corners (`var(--radius-card)`)
+- **Shadow:** Prominent shadow (0 20px 60px) to create depth and separation
+- **Border:** Subtle top and bottom borders (`var(--color-border)`) between header, body, and footer sections
+
+### Layout Structure
+- **Header:** Contains title (`h2`, 24px, brand primary blue) and close button (×), with bottom border
+- **Body:** Scrollable content area (max-height 85vh) with generous padding and headings in primary blue
+- **Footer:** Action buttons (secondary style) right-aligned, with light background (`var(--color-surface-muted)`)
+
+### Typography
+- **Title:** 24px, 700 weight, primary color (`var(--color-primary)`)
+- **Headings (h3):** 16px, 700 weight, primary color
+- **Body text:** Standard 14px, neutral text color (`var(--color-text)`)
+- **Labels/Supporting:** Muted text color (`var(--color-text-muted)`)
+
+### Interactive Elements
+- **Close button (×):** Subtle background, hover highlight, clear focus state
+- **Action buttons:** Follow standard button styling (primary blue for confirm, secondary for cancel/close)
+- **Escape key:** Support keyboard dismissal for better accessibility
+
+### Accessibility
+- Use `hidden` attribute (not `display: none`) for semantic hiding
+- Provide `aria-label` on close buttons
+- Ensure color contrast meets WCAA AA standards
+- Make close action available via button, overlay click, and Escape key
+- Maintain keyboard focus management
+
+### Responsive Behavior
+- **Desktop (>760px):** Max-width 700px, 90% width, 85vh max-height
+- **Mobile (≤760px):** Max-width 95%, 90vh max-height, reduced padding (16px)
+- Ensure scrollable content on small screens
+
+### Current Implementation
+Technical Details modal on `index.html` follows this pattern.
+
+---
+
+## モーダルダイアログ
+
+### 目的
+モーダルは現在のページから遷移せず、集中的な情報提示またはユーザー確認が必要な場合に使用します。必要最小限の利用に留めます。
+
+### 使用場面
+- 補足情報の詳細表示（例：Technical Details）
+- 重要な操作前の明示的な確認が必要な場合
+- 複雑なフォーム入力などメインレイアウトに収まらない場合
+- コンテキストに応じたヘルプやドキュメント表示
+
+### ビジュアルトリートメント
+- **オーバーレイ:** 半透明黒背景（50% 不透明度）でモーダルに注視を集中させる
+- **コンテンツボックス:** 白背景（`var(--color-surface)`）に角丸（`var(--radius-card)`）
+- **シャドウ:** 強いシャドウ（0 20px 60px）で奥行き感を出す
+- **ボーダー:** ヘッダー、ボディ、フッターの仕切り線（`var(--color-border)`）
+
+### レイアウト構成
+- **ヘッダー:** タイトル（h2、24px、プライマリブルー）とクローズボタン（×）、下側にボーダー
+- **ボディ:** スクロール可能なコンテンツ（最大高さ 85vh）と十分なパディング、見出しはプライマリブルー
+- **フッター:** アクション用ボタン（セカンダリスタイル）を右寄せ、背景は淡い色（`var(--color-surface-muted)`）
+
+### タイポグラフィ
+- **タイトル:** 24px、700 weight、プライマリカラー（`var(--color-primary)`）
+- **見出し（h3）:** 16px、700 weight、プライマリカラー
+- **本文:** 標準 14px、ニュートラルテキスト（`var(--color-text)`）
+- **ラベル・補助情報:** Muted カラー（`var(--color-text-muted)`）
+
+### インタラクティブ要素
+- **クローズボタン（×）:** さりげない背景、ホバーハイライト、明確なフォーカス表示
+- **アクション用ボタン:** 標準ボタンスタイル（確認は主ボタン、キャンセル・クローズはセカンダリ）
+- **Escape キー:** アクセシビリティ向上のためキーボード閉じに対応
+
+### アクセシビリティ
+- `hidden` 属性で意味的な非表示を実装（`display: none` ではなく）
+- クローズボタンに `aria-label` を付与
+- 色コントラストは WCAA AA 基準を満たす
+- クローズ操作をボタン、オーバーレイクリック、Escape キーで提供
+- キーボードフォーカス管理を適切に行う
+
+### レスポンシブ対応
+- **デスクトップ（>760px）:** 最大幅 700px、幅 90%、最大高さ 85vh
+- **モバイル（≤760px）:** 最大幅 95%、最大高さ 90vh、パディング 16px
+- 小さい画面でもスクロール可能なコンテンツを確保
+
+### 現在の実装
+`index.html` の Technical Details モーダルがこのパターンに従っています。

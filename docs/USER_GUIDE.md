@@ -12,6 +12,8 @@
 - Desktop labels are shortened for readability, such as `Owner`, `Start`, `Due`, and `%`.
 - The Actions column uses a stronger `Edit` action and a lighter `Delete` action to reduce visual weight.
 - The layout adjusts for smaller screens: toolbar wraps, and non-critical columns are hidden to keep the table readable.
+- Input controls (search, category, buttons) shrink on narrow screens to avoid horizontal overflow.
+- On very narrow screens (under 600px), the table switches to a card view for better mobile usability.
 - RAG is shown as a circular color indicator without text.
 - Pagination shows 10 items per page with `Prev`, `Next`, page links, and a total/range summary.
 - A `Download CSV` button exports the current filtered list as a CSV file (columns: ID, TaskName, Owner, Status, Start Date, Due Date, Complete %, Category, Description).
@@ -36,6 +38,7 @@
 - ページングは 1 ページ 10 件固定で、`Prev`、`Next`、ページ番号、総件数/表示範囲を表示します。
 - `Download CSV` ボタンで現在の絞り込み結果を CSV ファイルとして出力します（列: ID、TaskName、Owner、Status、Start Date、Due Date、Complete %、Category、Description）。
 - レイアウトは小さい画面でも読みやすくなるように自動調整され、重要度の低い列は省略されます。
+- 非常に狭い画面（600px未満）では、テーブルがカードビューに切り替わり、モバイルでの使いやすさが向上します。
 - 期限切れの Due Date は赤、3日以内の Due Date は黄で強調表示します。
 - 各行にチェックボックスがあり、ヘッダーのチェックボックスで表示中の行を一括選択/解除できます。
 - `Delete selected` は確認ダイアログの後に選択レコードを一括削除します。

@@ -57,7 +57,32 @@
 - 総件数と表示範囲が表示されることを確認。
 - 一覧をスクロールしてもヘッダーが見えることを確認。
 
-## 5. Create New Task
+## 5. Mobile / Responsive Layout
+### English
+- Resize the browser to 600px width or less.
+- Confirm the table hides and card view displays.
+- Verify each card shows task name, owner, category, status, priority, dates, percent complete, and action buttons.
+- Verify search and category filter work on card view.
+- Verify sorting works on card view.
+- Verify pagination works on card view.
+- Resize back to desktop and confirm the table returns.
+- Use mobile device emulation (DevTools) to verify the layout on iPhone, iPad, and other devices.
+- Verify no horizontal scrolling occurs on mobile.
+- Verify buttons and links remain accessible and not too close together.
+
+### 日本語
+- ブラウザを 600px 以下に縮小。
+- テーブルが非表示になり、カードビューが表示されることを確認。
+- 各カードにタスク名、担当者、カテゴリ、ステータス、優先度、日付、完了率、操作ボタンが表示されることを確認。
+- カードビューで検索とカテゴリ絞り込みが機能することを確認。
+- カードビューでソートが機能することを確認。
+- カードビューでページングが機能することを確認。
+- ブラウザをデスクトップサイズに拡大し、テーブルが戻ることを確認。
+- モバイルデバイスエミュレーション（DevTools）を使用して、iPhone、iPad、その他デバイスでレイアウトを確認。
+- モバイルで横スクロールが発生しないことを確認。
+- ボタンとリンクが操作可能で、間隔が適切であることを確認。
+
+## 6. Create New Task
 ### English
 - Open New Task form.
 - Enter valid data and proceed to Confirm.
@@ -70,7 +95,7 @@
 - Confirm 画面で Basic Information、Schedule、Progress に分かれて表示されることを確認。
 - Save 後に成功バナーが表示され、一覧へ反映されることを確認。
 
-## 6. Validation
+## 7. Validation
 ### English
 - Leave required fields empty and verify error messages.
 - Enter invalid percent and verify error message.
@@ -91,7 +116,7 @@
 - キーボード操作のみで移動し、フォーカス表示が明確であることを確認。
 - エラーのある項目で、補助文言とエラー文言が対象コントロールに紐付いていることを確認。
 
-## 7. Edit Task
+## 8. Edit Task
 ### English
 - Open task from list and click Edit.
 - Modify values and save.
@@ -102,7 +127,7 @@
 - 値を変更し保存。
 - 一覧と詳細に反映されることを確認。
 
-## 8. Delete Task
+## 9. Delete Task
 ### English
 - Click Delete and confirm prompt.
 - Verify task removed from list.
@@ -111,7 +136,34 @@
 - Delete 確認ダイアログが出ることを確認。
 - 一覧から削除されることを確認。
 
-## 9. Persistence
+## 9. Responsive Layout
+### English
+- On desktop (> 600px viewport width), verify the table view is displayed.
+- On tablet/narrow desktop (900px-600px), verify toolbar wraps and non-critical columns hide.
+- On mobile (≤ 600px viewport width), verify:
+  - Table is hidden.
+  - Card view appears showing each task as a card.
+  - Each card displays task name, ID, owner, category, status, priority, dates, percent complete, and Edit/Delete buttons.
+  - Input controls (search, category dropdown, buttons) do not cause horizontal overflow.
+  - Pagination buttons are visible and functional.
+  - Bulk delete functionality works with card-based checkboxes (if applicable).
+- Open DevTools and test using device emulation (iPhone, iPad, etc.).
+- Verify the layout is touch-friendly on mobile and does not require horizontal scrolling.
+
+### 日本語
+- デスクトップ（ビューポート幅 > 600px）でテーブルビューが表示されることを確認。
+- タブレット/狭いデスクトップ（900px-600px）でツールバーが折り返され、重要度の低い列が非表示になることを確認。
+- モバイル（ビューポート幅 ≤ 600px）で以下を確認:
+  - テーブルが非表示。
+  - カードビューがタスクをカード形式で表示。
+  - 各カードにタスク名、ID、担当者、カテゴリ、ステータス、優先度、日付、完了率、Edit/Delete ボタンが表示される。
+  - 入力欄（検索、カテゴリドロップダウン、ボタン）が横スクロールを起こさない。
+  - ページングボタンが表示され、機能する。
+  - 一括削除機能がカードビューで機能する。
+- DevTools を開いてデバイスエミュレーション（iPhone、iPad など）でテストする。
+- レイアウトがモバイルでタッチフレンドリーで、横スクロール不要であることを確認。
+
+## 10. Persistence
 ### English
 - Close browser and reopen.
 - Verify data persists in IndexedDB.

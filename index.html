@@ -21,8 +21,8 @@
           </p>
         </div>
         <div class="header-meta">
-          <div class="meta-chip">IndexedDB Storage</div>
-          <div class="meta-chip">List / Search / CRUD</div>
+          <button class="btn btn-secondary" id="userGuideButton" type="button">User Guide</button>
+          <button class="btn btn-secondary" id="techDetailsButton" type="button">Technical Details</button>
         </div>
       </header>
 
@@ -77,11 +77,126 @@
           </div>
         </div>
 
+        <div class="card-view" id="cardView"></div>
+
         <div class="summary-row">
           <div class="summary" id="summary"></div>
           <div class="pagination" id="pagination"></div>
         </div>
       </section>
+    </div>
+  </div>
+
+  <!-- User Guide Modal -->
+  <div class="modal" id="userGuideModal" hidden>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">How to Use the Task List</h2>
+        <button class="modal-close" id="closeUserGuideModal" type="button" aria-label="Close"
+          title="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Getting Started</h3>
+        <p>Open <code>index.html</code> in your browser to start using the task list. All data is stored locally in your
+          browser using IndexedDB.</p>
+
+        <h3>Viewing Tasks</h3>
+        <ul>
+          <li>The main page shows all tasks in a table format.</li>
+          <li>Use the search box to filter tasks by name.</li>
+          <li>Use the category dropdown to filter by category.</li>
+          <li>Click column headers to sort the list.</li>
+          <li>On screens 600px or narrower, the view switches to cards for better mobile usability.</li>
+          <li>Overdue tasks are highlighted in red; tasks due within 3 days are in yellow.</li>
+          <li>Click a task name to view details.</li>
+        </ul>
+
+        <h3>Creating and Editing Tasks</h3>
+        <ul>
+          <li>Click "New Task" to create a new task.</li>
+          <li>Fill in the required fields: Task Name and Assigned To.</li>
+          <li>Optional: Description, Start Date, Due Date, % Complete, Category.</li>
+          <li>Due Date must be on or after Start Date.</li>
+          <li>% Complete should be between 0-100.</li>
+          <li>Click "Confirm" to review, then "Save" to store.</li>
+          <li>To edit, click "Edit" from the actions column or detail view.</li>
+        </ul>
+
+        <h3>Other Features</h3>
+        <ul>
+          <li><strong>Pagination:</strong> 10 items per page with navigation.</li>
+          <li><strong>CSV Export:</strong> Download the current filtered list as CSV.</li>
+          <li><strong>Bulk Delete:</strong> Select rows with checkboxes and delete multiple tasks.</li>
+          <li><strong>Reset:</strong> Clear all filters to show all tasks.</li>
+        </ul>
+
+        <h3>Troubleshooting</h3>
+        <p>If you encounter issues, ensure JavaScript is enabled and you're using a modern browser (Chrome, Firefox,
+          Edge).</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="closeUserGuideModalBtn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Details Modal -->
+  <div class="modal" id="techDetailsModal" hidden>
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Technical Details</h2>
+        <button class="modal-close" id="closeTechDetailsModal" type="button" aria-label="Close"
+          title="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3>Architecture</h3>
+        <p>This application is a single-page, frontend-only task management system built with pure HTML, CSS, and
+          JavaScript.</p>
+
+        <h3>Data Storage</h3>
+        <ul>
+          <li><strong>Technology:</strong> IndexedDB</li>
+          <li><strong>Persistence:</strong> Data persists across browser sessions on the user's device</li>
+          <li><strong>Database:</strong> tasklist_db</li>
+          <li><strong>Stores:</strong> todos, categories, state</li>
+          <li><strong>No Server:</strong> All processing and storage happen locally in the browser</li>
+        </ul>
+
+        <h3>Features</h3>
+        <ul>
+          <li>List, search, filter, and sort tasks</li>
+          <li>Create, read, update, and delete (CRUD) operations</li>
+          <li>Fixed pagination (10 items per page)</li>
+          <li>CSV export of filtered results</li>
+          <li>Bulk operations (delete selected)</li>
+          <li>Responsive design with mobile card view (≤ 600px)</li>
+          <li>Form validation and confirmation workflow</li>
+        </ul>
+
+        <h3>Responsive Design</h3>
+        <ul>
+          <li><strong>Desktop:</strong> Table view with all columns and features</li>
+          <li><strong>Tablet (900px):</strong> Toolbar wraps; non-critical columns hidden</li>
+          <li><strong>Mobile (≤ 600px):</strong> Card view for better touch interaction; input controls shrink to
+            prevent horizontal overflow</li>
+        </ul>
+
+        <h3>Browser Support</h3>
+        <p>Modern browsers with JavaScript enabled and IndexedDB support (Chrome, Firefox, Safari, Edge)</p>
+
+        <h3>Files</h3>
+        <ul>
+          <li><strong>Frontend:</strong> assets/app.js, assets/styles.css</li>
+          <li><strong>Pages:</strong> index.html (list), create.html (form), confirm.html (review), complete.html
+            (success), view.html (detail)</li>
+          <li><strong>No Backend:</strong> This is a client-side application with no server dependencies</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="closeTechDetailsModalBtn" type="button">Close</button>
+      </div>
     </div>
   </div>
 
